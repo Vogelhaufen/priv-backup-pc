@@ -1,3 +1,7 @@
 /usr/bin/taskset -c 0-7,16-23 /usr/bin/steam-runtime
 
 start steam on a 7950x3D using 3D-VCache cores
+
+get affinity's:
+
+tasksel -cp <pid>
