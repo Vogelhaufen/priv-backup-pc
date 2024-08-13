@@ -1,4 +1,6 @@
 #!/bin/bash
+#mousetracker for unconitional screen lock on plasma
+
 
 killall -9 evtest
 /usr/bin/evtest /dev/input/event12 >> /tmp/mousetrack &
