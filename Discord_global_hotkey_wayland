@@ -1,0 +1,6 @@
+install piper and/or ratbagctl
+delete all profiles
+configure the only profile left:
+ratbagctl "Logitech G502 HERO Gaming Mouse" profile 4 button 4 action set macro KEY_F16
+
+F16 == Pause key
