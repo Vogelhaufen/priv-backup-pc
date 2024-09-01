@@ -1,6 +1,4 @@
 #!/bin/bash
-#mousetracker for unconitional screen lock on plasma
-
 
 killall -9 evtest
 /usr/bin/evtest /dev/input/event12 >> /tmp/mousetrack &
@@ -14,10 +12,10 @@ idlefail=3
 idlecheck () {
 
 
-idletime=$(/usr/bin/ls -l --time=mtime /tmp/mousetrack | cut -c 27-30)
+idletime=$(/usr/bin/ls -l --time=mtime /tmp/mousetrack | cut -c 27-30 | tr -d ' ')
 #3x mouse idle confirmation in 6 minutes to lock the screen
-sleep 300
-idletime2=$(/usr/sbin/ls -l --time=mtime /tmp/mousetrack | cut -c 27-30)
+sleep 120
+idletime2=$(/usr/sbin/ls -l --time=mtime /tmp/mousetrack | cut -c 27-30 | tr -d ' ')
 
 
 if [ $idletime == $idletime2 ]; then
@@ -36,6 +34,6 @@ fi
 
 idlecheck
 
-echo $(date +%F_%T) >> /tmp/screenlock_executed && loginctl lock-session 2>&1 1>/dev/null
+echo $(date +%F_%T) >> /tmp/screenlock_executed && loginctl lock-session $(loginctl list-sessions | cut -c 1-8  | head -n 2 | grep --invert-match "SESSION" | tr -d ' ')
 
 done
