@@ -1,7 +1,14 @@
 #!/bin/bash
-
 killall -9 evtest
-/usr/bin/evtest /dev/input/event12 >> /tmp/mousetrack &
+sleep 1
+
+# Run evtest for a brief moment and capture the output
+/usr/bin/evtest > /tmp/evtestoutput 2>&1 & sleep 1; killall evtest
+
+# Now extract the device name correctly
+asdf=$(grep "Logitech G502 HERO Gaming Mouse" /tmp/evtestoutput | grep --invert-match "Keyboard" | cut -f1 -d":")
+
+/usr/bin/evtest $asdf >> /tmp/mousetrack &
 
 while true
 do
