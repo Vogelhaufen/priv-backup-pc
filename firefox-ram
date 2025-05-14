@@ -1,0 +1,24 @@
+https://spencermortensen.com/articles/linux-firefox-in-ram/
+
+tmpfs  /home/hans/.mozilla  tmpfs  defaults,size=10000000000,noatime,uid=1000,gid=1000  0  0
+
+systemd:
+
+[blackmoore RSI Launcher]# cat /usr/local/sbin/mozilla-start 
+#!/bin/sh
+#xsudo chown hans:hans /home/hans/.mozilla
+rsync -Haq '/home/hans/.config/mozilla/' '/home/hans/.mozilla/'
+[blackmoore RSI Launcher]# cat /usr/local/sbin/mozilla-stop
+#!/bin/sh
+
+if [ -n "$(ls -A '/home/hans/.mozilla')" ]; then
+    rsync -Haq --delete '/home/hans/.mozilla/' '/home/hans/.config/mozilla/'
+fi
+[blackmoore RSI Launcher]# 
+
+firefox about:config
+
+extensions.pocket.enabled false
+browser.cache.disk.parent_directory /home/hans/.mozilla/cache
+
+check about:cache to verify
