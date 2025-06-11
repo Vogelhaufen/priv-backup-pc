@@ -1,0 +1,43 @@
+#!/bin/sh
+cd "/home/hans/Games/star-citizen-xdd20252nd/drive_c/Program Files/Roberts Space Industries/RSI Launcher"
+export LC_ALL="en_US.utf8" 
+export __GL_SHADER_DISK_CACHE="1" 
+export __GL_SHADER_DISK_CACHE_PATH="/home/hans/Games/star-citizen-xdd20252nd" 
+export PULSE_LATENCY_MSEC="60" 
+export DXVK_HDR="1" 
+export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS=DLSSIndicator=1024,DLSSGIndicator=2" 
+export EOS_USE_ANTICHEATCLIENTNULL="1" 
+export GAMEIDyy="umu-starcitizen" 
+#export LD_LIBRARY_PATH="/home/hans/libcuda.patched.so" 
+#export LD_PRELOAD="/tmp/libcuda.patched.so" 
+export PROTON_ENABLE_NGX_UPDATER="1" 
+export WINEESYNC="" 
+export WINEFSYNC="" 
+export WINEDEBUG="-all" 
+export DXVK_LOG_LEVEL="error" 
+export UMU_LOG="1" 
+export WINEARCH="win64" 
+export WINE="/home/hans/.local/share/lutris/runners/wine/wine-tkg-ntsync-git-10.3.r171.ge66405a5040-327-x86_64/bin/wine" 
+export WINE_MONO_CACHE_DIR="/home/hans/.local/share/lutris/runners/wine/wine-tkg-ntsync-git-10.3.r171.ge66405a5040-327-x86_64/mono" 
+export WINE_GECKO_CACHE_DIR="/home/hans/.local/share/lutris/runners/wine/wine-tkg-ntsync-git-10.3.r171.ge66405a5040-327-x86_64/gecko" 
+export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd" 
+export PROTON_NO_ESYNC="1" 
+export PROTON_NO_FSYNC="1" 
+export DXVK_NVAPIHACK="0" 
+export DXVK_ENABLE_NVAPI="1" 
+export PROTON_DXVK_D3D8="1" 
+export WINEDLLOVERRIDES="d3d10core,d3d11,d3d8,d3d9,dxgi,nvapi,nvapi64,nvofapi64=n;winemenubuilder=" 
+export WINE_LARGE_ADDRESS_AWARE="1" 
+export STORE="none" 
+export GAME_NAME="Star Citizen" 
+export GAME_DIRECTORY="/home/hans/Games/star-citizen-xdd20252nd" 
+export PYTHONPATH="/usr/lib/lutris:/usr/bin:/usr/lib/python313.zip:/usr/lib/python3.13:/usr/lib/python3.13/lib-dynload:/usr/lib/python3.13/site-packages" 
+export LUTRIS_GAME_UUID="d8dd8269-c43e-453c-8d76-6a411c006d42" 
+export TERM="xterm" 
+#echo $LD_LIBRARY_PATH
+#echo libcuda-patched-path
+#ldconfig -p | grep libcuda.patched.so
+#echo libcuda-path
+#ldconfig -p | ghep libcuda
+exec "/home/hans/.local/share/lutris/runners/wine/wine-tkg-ntsync-git-10.3.r171.ge66405a5040-327-x86_64/bin/wine" "/home/hans/Games/star-citizen-xdd20252nd/drive_c/Program Files/Roberts Space Industries/RSI Launcher/RSI Launcher.exe" "--disable-gpu" "--in-process-gpu"
+exit $?
