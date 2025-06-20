@@ -1,7 +1,6 @@
 #Why? NTSYNC, Mousepointer fixes, Anti Infinite Loading fixes thanks to Mactan runner, DLSSv4
 #Where? https://github.com/mactan-sc/mactan-sc-wine/releases/tag/10.3-git
 
-#dirty without quick. just the dirty
 
 #changeme
 GAMEDIREXE="/mnt/m2games/Heroic-N-Lutris/star-citizen-xdd20252nd/drive_c/Program Files/Roberts Space Industries/RSI Launcher/RSI Launcher.exe"
