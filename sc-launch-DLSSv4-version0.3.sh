@@ -31,7 +31,27 @@ grep "export" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
 
 #download mactan runner
-tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/mactan103 https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz)
+#tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/mactan103 https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz)
+# Download and extract mactan runner only if not already done
+ARCHIVE_PATH="$PWD/runners/mactan103"
+EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
+
+if [ -d "$EXTRACT_DIR" ]; then
+    echo "Mactan runner already extracted, using existing files."
+else
+    if [ ! -f "$ARCHIVE_PATH" ]; then
+        echo "Downloading mactan runner..."
+        wget -O "$ARCHIVE_PATH" https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz
+    else
+        echo "Archive already downloaded."
+    fi
+
+    echo "Extracting mactan runner..."
+    mkdir -p "$EXTRACT_DIR"
+    tar xfz "$ARCHIVE_PATH" --directory="$EXTRACT_DIR"
+fi
+
+
 
 # --- Check if /usr/lib/libcuda.so changed and patch only if needed ---
 LIBCUDA_ORIG="/usr/lib/libcuda.so"
