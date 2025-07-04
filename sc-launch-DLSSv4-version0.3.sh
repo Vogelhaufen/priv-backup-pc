@@ -34,9 +34,7 @@ else
   echo "No NVIDIA graphics card found. Exiting the script."
   exit 1
 fi
-
-  GNU nano 8.5                                                                                                               nvidia-check.sh                                                                                                                           
-#!/bin/bash
+                                                                                                                  
 
 # Default to no GPU
 VRAM_MB_MINUS_1000=0
