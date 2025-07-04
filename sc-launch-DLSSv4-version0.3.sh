@@ -26,12 +26,10 @@
 # Add additional environment variables here as needed
 ################################################################
 
-
+#grep PREFIX ENVs from source
 grep "export" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
 
-#download mactan runner
-#tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/mactan103 https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz)
 # Download and extract mactan runner only if not already done
 ARCHIVE_PATH="$PWD/runners/mactan103"
 EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
