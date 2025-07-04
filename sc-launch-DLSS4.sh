@@ -9,6 +9,7 @@
 # They are automatically detected by most desktop environments for easy game
 # launching.
 #
+#
 ################################################################################
 # $HOME/Desktop/RSI Launcher.desktop
 # $HOME/.local/share/applications/wine/Programs/Roberts Space Industries/RSI Launcher.desktop
@@ -25,6 +26,10 @@
 # Add additional environment variables here as needed
 ################################################################
 
+
+grep "export" sc-launch.sh > $PWD/ENVEXPORT
+source $PWD/ENVEXPORT
+
 #download mactan runner
 tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/mactan103 https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz)
 
@@ -32,6 +37,7 @@ tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/m
 echo "Patching libcuda"
 echo -ne $(od -An -tx1 -v /usr/lib/libcuda.so | tr -d '\n' | sed -e 's/00 00 00 f8 ff 00 00 00/00 00 00 f8 ff ff 00 00/g' -e 's/ /\\x/g') > /tmp/libcuda.patched.so
 echo "Patching libcuda done"
+
 #might not be needed. removed:
 #echo !!!Change SC Launcher Game Dir to $(echo "Z:$(realpath "$HOME/Games/star-citizen/drive_c/Program Files/Roberts Space Industries")" | sed -e 's/\//\\/g')
 
@@ -41,27 +47,27 @@ cp xaudio2_2.dll cryptbase.dll
 cp xaudio2_2.dll devobject.dll
 cp xaudio2_2.dll drvstore.dll
 
-export WINEPREFIX="/home/hans/schokolade"
+
 launch_log="$WINEPREFIX/sc-launch.log"
 export WINEDLLOVERRIDES="d3d10core,d3d11,d3d8,d3d9,dxgi,nvapi,nvapi64,nvofapi64=n;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
-#export WINEDLLOVERRIDES=winemenubuilder.exe=d # Prevent updates from overwriting our .desktop entries
 export WINEDEBUG=-all # Cut down on console debug messages
 
+#force NTSYNC; fallback E/FSYNC
 export WINEESYNC
 export WINEFSYNC
+
 echo "Please allow sudo to enable NTSYNC"
 sudo modprobe ntsync
 
-#protonfoo
+#protonfoo / umu; no alien startscripts
 export GAMEID=umu-starcitizen-noPreset-noProton
 #disable EAC
 export EOS_USE_ANTICHEATCLIENTNULL=1
-#patched cuda
-#export LD_LIBRARY_PATH=/tmp/libcuda.patched.so
+#Patched cuda
 export LD_LIBRARY_PATH=/tmp/libcuda.patched.so
 export LD_PRELOAD=/tmp/libcuda.patched.so
-#DLSSv4
+#Enable DLSS Version 4, all variables are needed with wine
 export PROTON_ENABLE_NGX_UPDATER=1 
 export DXVK_NVAPI_DRS_SETTINGS=NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest
 #show DLSSv4 debug info overlay ingame. to disable set both ENVs to 1
@@ -74,6 +80,7 @@ export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 # Mesa (AMD/Intel) shader cache options
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
+#NVIDIA custom / DXVK NVAPI
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
@@ -90,7 +97,7 @@ export PROTON_DXVK_D3D8="1"
 # To use a custom wine runner, set the path to its bin directory
 # export wine_path="/path/to/custom/runner/bin"
 ################################################################
-export wine_path="/home/hans/schokolade/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin"
+
 
 #############################################
 # Command line arguments
@@ -147,6 +154,4 @@ trap "update_check; \"$wine_path\"/wineserver -k" EXIT
 # gamescope --hdr-enabled -W 2560 -H 1440 --force-grab-cursor gamemoderun "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" > "$launch_log" 2>&1
 
 export; "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
-echo "NTSYNC running check:"
-lsof /dev/ntsync
 
