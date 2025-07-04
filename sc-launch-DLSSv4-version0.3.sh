@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
 ################################################################################
-# This script configures and launches Star Citizen.
-# It is installed by the LUG Helper for a non-Lutris installation.
+# This script configures and launches Star Citizen FOR NVIDIA CARDS.
+# This script configures and launches Star Citizen FOR NVIDIA CARDS.
+# This script configures and launches Star Citizen FOR NVIDIA CARDS.
 #
 # The following .desktop files are added by wine during installation and then
 # modified by the LUG Helper to call this script.
