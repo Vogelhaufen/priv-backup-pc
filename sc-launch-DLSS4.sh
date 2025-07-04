@@ -1,157 +1,130 @@
 #!/usr/bin/env sh
-
 ################################################################################
-# This script configures and launches Star Citizen.
-# It is installed by the LUG Helper for a non-Lutris installation.
-#
-# The following .desktop files are added by wine during installation and then
-# modified by the LUG Helper to call this script.
-# They are automatically detected by most desktop environments for easy game
-# launching.
-#
-#
-################################################################################
-# $HOME/Desktop/RSI Launcher.desktop
-# $HOME/.local/share/applications/wine/Programs/Roberts Space Industries/RSI Launcher.desktop
-################################################################################
-#
-# If you do not wish to use the above .desktop files, simply run this script
-# from your terminal.
-#
-# version: 1.6
+# Star Citizen Launcher with DLSS4 and patched libcuda, using custom Wine build
+# Includes automatic Wine runner download and patching guard
 ################################################################################
 
-################################################################
-# Configure the environment
-# Add additional environment variables here as needed
-################################################################
+# --- Configurable paths ---
+LIBCUDA_ORIG="/usr/lib/libcuda.so"
+PATCHED_LIB="/tmp/libcuda.patched.so"
+HASHFILE="$HOME/.cache/libcuda.so.sha256"
 
+WINE_RUNNER_DIR="$PWD/runners/mactan103"
+WINE_RUNNER_TAR="$PWD/runners/mactan103.tar.gz"
+WINE_RUNNER_URL="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz"
 
-grep "export" sc-launch.sh > $PWD/ENVEXPORT
-source $PWD/ENVEXPORT
+WINEPREFIX="$HOME/Games/star-citizen"
+wine_path="${wine_path:-$WINE_RUNNER_DIR/bin}"
 
-#download mactan runner
-tar xfz $PWD/runners/mactan103 --directory=$PWD/runners $(wget -O $PWD/runners/mactan103 https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz)
+# --- Patch libcuda.so only if hash changes ---
+mkdir -p "$(dirname "$HASHFILE")"
+CURRENT_HASH=$(sha256sum "$LIBCUDA_ORIG" | cut -d ' ' -f 1)
 
-#libcuda hack
-echo "Patching libcuda"
-echo -ne $(od -An -tx1 -v /usr/lib/libcuda.so | tr -d '\n' | sed -e 's/00 00 00 f8 ff 00 00 00/00 00 00 f8 ff ff 00 00/g' -e 's/ /\\x/g') > /tmp/libcuda.patched.so
-echo "Patching libcuda done"
+if [ ! -f "$HASHFILE" ] || [ "$CURRENT_HASH" != "$(cat "$HASHFILE")" ]; then
+    echo "[INFO] libcuda.so changed or not yet patched. Patching now..."
+    echo "Patching libcuda..."
 
-#might not be needed. removed:
-#echo !!!Change SC Launcher Game Dir to $(echo "Z:$(realpath "$HOME/Games/star-citizen/drive_c/Program Files/Roberts Space Industries")" | sed -e 's/\//\\/g')
+    tr '\000' '\377' < "$LIBCUDA_ORIG" | \
+    sed 's/\x48\x8d\x15\x00\x00\x00\x00/\x48\x8d\x15\xff\xff\xff\xff/g' > "$PATCHED_LIB"
 
-#Create fake DLLs for DLSS
-cd $HOME/Games/star-citizen/drive_c/windows/system32/
+    if [ $? -ne 0 ]; then
+        echo "[ERROR] Failed to patch libcuda.so!"
+        exit 1
+    fi
+
+    echo "Patching libcuda done"
+    echo "$CURRENT_HASH" > "$HASHFILE"
+else
+    echo "[INFO] libcuda.so is already patched and up to date."
+fi
+
+# --- Ensure Wine runner exists or download it ---
+if [ ! -d "$WINE_RUNNER_DIR" ]; then
+    echo "[INFO] Wine runner not found. Downloading..."
+    mkdir -p "$(dirname "$WINE_RUNNER_TAR")"
+    wget -O "$WINE_RUNNER_TAR" "$WINE_RUNNER_URL"
+
+    echo "[INFO] Extracting Wine runner..."
+    tar -xf "$WINE_RUNNER_TAR" -C "$(dirname "$WINE_RUNNER_DIR")"
+else
+    echo "[INFO] Wine runner already present. Skipping download."
+fi
+
+# --- Load environment exports from main launcher script ---
+grep "export" sc-launch.sh > "$PWD/ENVEXPORT"
+. "$PWD/ENVEXPORT"
+
+# --- Create fake DLLs required for launch ---
+cd "$WINEPREFIX/drive_c/windows/system32/"
 cp xaudio2_2.dll cryptbase.dll
 cp xaudio2_2.dll devobject.dll
 cp xaudio2_2.dll drvstore.dll
 
-
-launch_log="$WINEPREFIX/sc-launch.log"
+# --- Set Wine and DLSS-related environment variables ---
 export WINEDLLOVERRIDES="d3d10core,d3d11,d3d8,d3d9,dxgi,nvapi,nvapi64,nvofapi64=n;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
-export WINEDEBUG=-all # Cut down on console debug messages
-
-#force NTSYNC; fallback E/FSYNC
-export WINEESYNC
-export WINEFSYNC
-
-echo "Please allow sudo to enable NTSYNC"
-sudo modprobe ntsync
-
-#protonfoo / umu; no alien startscripts
-export GAMEID=umu-starcitizen-noPreset-noProton
-#disable EAC
+export WINEDEBUG=-all
+export WINEESYNC=1
+export WINEFSYNC=1
 export EOS_USE_ANTICHEATCLIENTNULL=1
-#Patched cuda
-export LD_LIBRARY_PATH=/tmp/libcuda.patched.so
-export LD_PRELOAD=/tmp/libcuda.patched.so
-#Enable DLSS Version 4, all variables are needed with wine
-export PROTON_ENABLE_NGX_UPDATER=1 
-export DXVK_NVAPI_DRS_SETTINGS=NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest
-#show DLSSv4 debug info overlay ingame. to disable set both ENVs to 1
-export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS=DLSSIndicator=1024,DLSSGIndicator=2
-# Nvidia cache options
+
+export LD_LIBRARY_PATH="$(dirname "$PATCHED_LIB")"
+export LD_PRELOAD="$PATCHED_LIB"
+
+export PROTON_ENABLE_NGX_UPDATER=1
+export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest"
+export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
+
 export __GL_SHADER_DISK_CACHE=1
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
-# Mesa (AMD/Intel) shader cache options
+
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
-#NVIDIA custom / DXVK NVAPI
+
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
 
-# Optional HUDs
-#export DXVK_HUD=fps,export WINEARCH="win64" compiler
-#export MANGOHUD=1
+# Optional: enable HUDs
+# export DXVK_HUD=fps
+# export MANGOHUD=1
 
-################################################################
-# Configure the wine binaries to be used
-#
-# To use a custom wine runner, set the path to its bin directory
-# export wine_path="/path/to/custom/runner/bin"
-################################################################
+# --- Load ntsync kernel module ---
+echo "Please allow sudo to enable NTSYNC"
+sudo modprobe ntsync
 
-
-#############################################
-# Command line arguments
-#############################################
-# shell - Drop into a Wine maintenance shell
-# config - Wine configuration
-# controllers - Game controller configuration
-# Usage: ./sc-launch.sh shell
+# --- Wine maintenance commands ---
 case "$1" in
-    "shell")
-        echo "Entering Wine prefix maintenance shell. Type 'exit' when done."
-        export PATH="$wine_path:$PATH"; export PS1="Wine: "
-        cd "$WINEPREFIX"; pwd; /usr/bin/env bash --norc; exit 0
-        ;;
-    "config")
-        /usr/bin/env bash --norc -c "${wine_path}/winecfg"; exit 0
-        ;;
-    "controllers")
-        /usr/bin/env bash --norc -c "${wine_path}/wine control joy.cpl"; exit 0
-        ;;
+  shell)
+    echo "Entering Wine prefix maintenance shell. Type 'exit' when done."
+    export PATH="$wine_path:$PATH"
+    export PS1="Wine: "
+    cd "$WINEPREFIX" && /usr/bin/env bash --norc
+    exit 0
+    ;;
+  config)
+    /usr/bin/env bash --norc -c "${wine_path}/winecfg"
+    exit 0
+    ;;
+  controllers)
+    /usr/bin/env bash --norc -c "${wine_path}/wine control joy.cpl"
+    exit 0
+    ;;
 esac
 
-#############################################
-# Run optional prelaunch and postexit scripts
-#############################################
-# To use, update the game install paths here, create the scripts with your
-# desired actions in them, then place them in your prefix directory:
-# sc-prelaunch.sh and sc-postexit.sh
-# Replace the trap line in the section below with the example provided here
-#
-# "$WINEPREFIX/sc-prelaunch.sh"
-# trap "update_check; \"$wine_path\"/wineserver -k; \"$WINEPREFIX\"/sc-postexit.sh" EXIT
-
-#############################################
-# It's a trap!
-#############################################
-# Kill the wine prefix when this script exits
-# This makes sure there will be no lingering background wine processes
+# --- Cleanup on exit + update check ---
 update_check() {
-    while "$wine_path"/winedbg --command "info proc" | grep -qi "rsi.*setup"; do
-        sleep 2
-    done
+  while "$wine_path"/winedbg --command "info proc" | grep -qi "rsi.*setup"; do
+    sleep 2
+  done
 }
 trap "update_check; \"$wine_path\"/wineserver -k" EXIT
 
-#############################################
-# Launch the game
-#############################################
-# To enable feral gamemode, replace the launch line below with:
-# gamemoderun "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" > "$launch_log" 2>&1
-#
-# To enable gamescope and feral gamemode, replace the launch line below with the
-# desired gamescope arguments. For example:
-# gamescope --hdr-enabled -W 2560 -H 1440 --force-grab-cursor gamemoderun "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" > "$launch_log" 2>&1
-
-"$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
-
+# --- Launch the RSI Launcher (Star Citizen) ---
+echo "Launching Star Citizen..."
+"$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" \
+  --disable-gpu --in-process-gpu > "$WINEPREFIX/sc-launch.log" 2>&1
