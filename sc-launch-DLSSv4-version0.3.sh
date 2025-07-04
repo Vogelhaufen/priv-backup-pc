@@ -35,7 +35,40 @@ else
   exit 1
 fi
 
-# Continue with the rest of your script if NVIDIA is present
+  GNU nano 8.5                                                                                                               nvidia-check.sh                                                                                                                           
+#!/bin/bash
+
+# Default to no GPU
+VRAM_MB_MINUS_1000=0
+
+# Check for NVIDIA GPU
+if lspci | grep -i nvidia > /dev/null; then
+    echo "NVIDIA GPU detected."
+
+    # Check if nvidia-smi is available
+    if command -v nvidia-smi > /dev/null; then
+        # Get VRAM in MiB (first GPU only)
+        VRAM_TOTAL=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n 1)
+
+        # Subtract 1000 MiB
+        VRAM_MB_MINUS_1000=$((VRAM_TOTAL - 1000))
+
+        # Export the variable
+        export VRAM_MB_MINUS_1000
+        echo "VRAM_MB_MINUS_1000=$VRAM_MB_MINUS_1000"
+    else
+        echo "nvidia-smi not found. Cannot determine VRAM."
+    fi
+else
+    echo "No NVIDIA GPU detected."
+fi
+
+export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicResources = a;"
+
+
+
+
+# Continue if NVIDIA is present
 
 
 grep "export" sc-launch.sh > $PWD/ENVEXPORT
