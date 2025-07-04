@@ -41,7 +41,7 @@ VRAM_MB_MINUS_1000=0
 
 # Check for NVIDIA GPU
 if lspci | grep -i nvidia > /dev/null; then
-    echo "NVIDIA GPU detected."
+    echo "NVIDIA graphics card found. Checking for MAX VRAM"
 
     # Check if nvidia-smi is available
     if command -v nvidia-smi > /dev/null; then
