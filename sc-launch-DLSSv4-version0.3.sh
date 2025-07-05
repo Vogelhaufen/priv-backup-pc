@@ -88,7 +88,7 @@ else
 
     echo "Extracting mactan runner..."
     mkdir -p "$EXTRACT_DIR"
-    tar xfz "$ARCHIVE_PATH" --directory="$EXTRACT_DIR"
+    tar xfz "$ARCHIVE_PATH" --directory="$EXTRACT_DIR/../"
 fi
 
 
