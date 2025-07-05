@@ -16,7 +16,7 @@
 # Add additional environment variables here as needed
 ################################################################
 
-# Check if an NVIDIA graphics card is present
+# Check if an NVIDIA graphics card is present otherwise stop
 if lspci | grep -i nvidia > /dev/null; then
   echo "NVIDIA graphics card found."
 else
@@ -27,7 +27,9 @@ fi
 # Default to no GPU
 VRAM_MB_MINUS_1000=0
 
-# Check for NVIDIA GPU
+# Check if an NVIDIA graphics card is present and set VRAM amount to limit memory avaible for SC
+# fix for frame drops
+# https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#severe-frame-drops
 if lspci | grep -i nvidia > /dev/null; then
     echo "NVIDIA GPU detected. Checking for VRAM MAX"
 
