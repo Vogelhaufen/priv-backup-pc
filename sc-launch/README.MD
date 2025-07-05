@@ -63,7 +63,7 @@ For installation and setup guidance, see:
 ## 📂 File Info
 
 - **Script Name:** sc-launch-DLSS.sh
-- **Version:** Yes.
+- **Version:** It is a shellscript.
 
 ---
 
