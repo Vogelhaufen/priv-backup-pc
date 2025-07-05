@@ -20,8 +20,8 @@ For installation and setup guidance, see:
 # - Auto-installs Mactan wine 10.3 (staging build)
 # - Detects and limits VRAM for performance
 # - Applies Wine patches (mouse cursor fix, infinite loading fix)
-# - Sets up fake DLLs for DLSS compatibility
-# - Patches libcuda.so to enable DLSS
+# - Sets up fake DLLs for DLSS Version 4 compatibility
+# - Patches libcuda.so to enable DLSS Version 4
 # - Provides Wine shell, config, and controller setup options
 # - Auto-handles wine prefix management and logging
 ################################################################################
