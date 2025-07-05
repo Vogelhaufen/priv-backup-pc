@@ -3,7 +3,7 @@
 ################################################################################
 # This script configures and launches Star Citizen FOR NVIDIA CARDS.
 #
-# Downloads and install Mactan WINE 10.3 staging which is recommended for best
+# Downloads and installs Mactan WINE 10.3 staging which is recommended for best
 # performance and also installs useful patches like fix mousepointer, fix infinite
 # loading screen.
 # 
