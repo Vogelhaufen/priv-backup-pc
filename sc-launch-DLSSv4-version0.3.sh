@@ -11,6 +11,18 @@
 # Enables DLSS Version 4 and patches all required files when needed.
 ################################################################################
 
+################################################################################
+# Install:
+# Download this script to your SC Prefix dir. 
+# Default is $HOME/Games/star-citizen
+# chmod +x sc-launch-DLSSv4-version0.3.sh
+# 
+# Start the game
+# sh sc-launch-DLSSv4-version0.3.sh
+#
+# You need a POSIX compliant shell!
+################################################################################
+
 ################################################################
 # Configure the environment
 # Add additional environment variables here as needed
