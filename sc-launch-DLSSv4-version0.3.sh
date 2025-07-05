@@ -34,14 +34,13 @@ else
   echo "No NVIDIA graphics card found. Exiting the script."
   exit 1
 fi
-                                                                                                                  
 
 # Default to no GPU
 VRAM_MB_MINUS_1000=0
 
 # Check for NVIDIA GPU
 if lspci | grep -i nvidia > /dev/null; then
-    echo "NVIDIA graphics card found. Checking for MAX VRAM"
+    echo "NVIDIA GPU detected. Checking for VRAM MAX"
 
     # Check if nvidia-smi is available
     if command -v nvidia-smi > /dev/null; then
@@ -68,14 +67,15 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicReso
 
 # Continue if NVIDIA is present
 
-
-grep "export" sc-launch.sh > $PWD/ENVEXPORT
+grep "export WINEPREFIX" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
+
+#removeme
+export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
 
 # Download and extract mactan runner only if not already done
 ARCHIVE_PATH="$PWD/runners/mactan103"
 EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
-
 if [ -d "$EXTRACT_DIR" ]; then
     echo "Mactan runner already extracted, using existing files."
 else
@@ -116,6 +116,8 @@ fi
 
 #might not be needed. removed:
 #echo !!!Change SC Launcher Game Dir to $(echo "Z:$(realpath "$HOME/Games/star-citizen/drive_c/Program Files/Roberts Space Industries")" | sed -e 's/\//\\/g')
+#export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
+
 
 #Create fake DLLs for DLSS
 cd $HOME/Games/star-citizen/drive_c/windows/system32/
@@ -173,7 +175,8 @@ export PROTON_DXVK_D3D8="1"
 # To use a custom wine runner, set the path to its bin directory
 # export wine_path="/path/to/custom/runner/bin"
 ################################################################
-
+export wine_path=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
+export WINE_PATH=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
 
 #############################################
 # Command line arguments
@@ -228,5 +231,5 @@ trap "update_check; \"$wine_path\"/wineserver -k" EXIT
 # To enable gamescope and feral gamemode, replace the launch line below with the
 # desired gamescope arguments. For example:
 # gamescope --hdr-enabled -W 2560 -H 1440 --force-grab-cursor gamemoderun "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" > "$launch_log" 2>&1
-
+export
  "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
