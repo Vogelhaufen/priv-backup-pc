@@ -55,6 +55,8 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicReso
 
 
 # Continue if NVIDIA is present
+# Lets find our WINEPREFIX dir
+# sourcing is used for future ENV imports
 
 grep "export WINEPREFIX" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
