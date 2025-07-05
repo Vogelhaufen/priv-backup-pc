@@ -22,7 +22,7 @@
 # Default is $HOME/Games/star-citizen
 #
 # Make the script executable:
-# chmod +x sc-launch-DLSSv4-version0.3.sh
+# chmod +x sc-launch-DLSS.sh
 # 
 # Start the game:
 # sh sc-launch-DLSS.sh
