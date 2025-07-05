@@ -26,8 +26,8 @@
 # 
 # Start the game:
 # sh sc-launch-DLSS.sh
-#
-# You need a POSIX compliant shell! shells like fish destroy the patch function 
+# Note: This script requires a POSIX-compliant shell. Avoid using shells like 'fish'
+# which may break certain shell functions used here.
 ################################################################################
 
 #--------------------------------------#
