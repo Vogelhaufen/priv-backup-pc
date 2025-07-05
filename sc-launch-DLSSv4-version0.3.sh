@@ -249,5 +249,7 @@ trap "update_check; \"$wine_path\"/wineserver -k" EXIT
 # To enable gamescope and feral gamemode, replace the launch line below with the
 # desired gamescope arguments. For example:
 
-#to enable CPU affinity use taskset -c 0-7,16-23 [...] matching your CPU 
+# to enable CPU affinity use taskset -c 0-7,16-23 [...] matching your CPU 
+# example:
+# /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
 "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
