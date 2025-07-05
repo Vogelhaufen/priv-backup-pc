@@ -31,7 +31,7 @@
 
 # Check if an NVIDIA graphics card is present otherwise stop
 if lspci | grep -i nvidia > /dev/null; then
-  echo "NVIDIA graphics card found."
+  echo "!"
 else
   echo "No NVIDIA graphics card found. Exiting the script."
   exit 1
