@@ -26,6 +26,7 @@
 # 
 # Start the game:
 # sh sc-launch-DLSS.sh
+#
 # Note: This script requires a POSIX-compliant shell. Avoid using shells like 'fish'
 # which may break certain shell functions used here.
 ################################################################################
