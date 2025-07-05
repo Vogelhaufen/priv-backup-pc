@@ -2,24 +2,13 @@
 
 ################################################################################
 # This script configures and launches Star Citizen FOR NVIDIA CARDS.
-# This script configures and launches Star Citizen FOR NVIDIA CARDS.
-# This script configures and launches Star Citizen FOR NVIDIA CARDS.
 #
-# The following .desktop files are added by wine during installation and then
-# modified by the LUG Helper to call this script.
-# They are automatically detected by most desktop environments for easy game
-# launching.
-#
-#
-################################################################################
-# $HOME/Desktop/RSI Launcher.desktop
-# $HOME/.local/share/applications/wine/Programs/Roberts Space Industries/RSI Launcher.desktop
-################################################################################
-#
-# If you do not wish to use the above .desktop files, simply run this script
-# from your terminal.
-#
-# version: 1.6
+# Download and install Mactan WINE 10.3 staging which is recommended for best
+# performance and installs useful patches like fix mousepointer, fix infinite
+# loading screen.
+# 
+# 
+# Enables DLSS Version 4 and patches all required files
 ################################################################################
 
 ################################################################
@@ -230,6 +219,4 @@ trap "update_check; \"$wine_path\"/wineserver -k" EXIT
 #
 # To enable gamescope and feral gamemode, replace the launch line below with the
 # desired gamescope arguments. For example:
-# gamescope --hdr-enabled -W 2560 -H 1440 --force-grab-cursor gamemoderun "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" > "$launch_log" 2>&1
-export
  "$wine_path"/wine "C:\Program Files\Roberts Space Industries\RSI Launcher\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
