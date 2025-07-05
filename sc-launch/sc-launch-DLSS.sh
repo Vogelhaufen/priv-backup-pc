@@ -16,6 +16,24 @@
 # - Auto-handles wine prefix management and logging
 ################################################################################
 
+################################################################################
+# Install:
+# Download this script to your SC Prefix dir. 
+# Default is $HOME/Games/star-citizen
+#
+# Make the script executable:
+# chmod +x sc-launch-DLSS.sh
+# 
+# Start the game:
+# sh sc-launch-DLSS.sh
+#
+# You need a POSIX compliant shell! shells like fish destroy the patch function 
+################################################################################
+
+#--------------------------------------#
+# CONFIGURATION & ENVIRONMENT SETUP    #
+#--------------------------------------#
+
 SC_LAUNCH_SCRIPT="sc-launch.sh"
 ENVEXPORT_FILE="$PWD/ENVEXPORT"
 
