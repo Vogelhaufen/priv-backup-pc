@@ -67,22 +67,13 @@ fi
 
 export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicResources = a;"
 
-
-
-
 # Continue if NVIDIA is present
 # Lets find our WINEPREFIX dir
 # sourcing is used for future ENV imports
-
 grep "export WINEPREFIX" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
 echo "sourcing WINEPREFIX from sc-launch.sh:"
 echo "$WINEPREFIX"
-
-#justfordebug
-#removeme
-#snapshotver=1.9
-#export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
 
 # Download and extract mactan runner only if not already done
 ARCHIVE_PATH="$PWD/runners/mactan103"
@@ -142,6 +133,7 @@ cp xaudio2_2.dll drvstore.dll
 
 
 launch_log="$WINEPREFIX/sc-launch.log"
+#bloated for reference
 export WINEDLLOVERRIDES="d3d10core,d3d11,d3d8,d3d9,dxgi,nvapi,nvapi64,nvofapi64=n;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
 export WINEDEBUG=-all # Cut down on console debug messages
@@ -159,15 +151,17 @@ sudo modprobe ntsync
 #protonfoo / umu; no alien startscripts
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
-#disable EAC
+# disable EAC
 export EOS_USE_ANTICHEATCLIENTNULL=1
-#patched cuda
+# patched cuda
 export LD_LIBRARY_PATH=$PATCHED_LIB
 export LD_PRELOAD=$PATCHED_LIB 
-#DLSSv4
+# DLSSv4
 export PROTON_ENABLE_NGX_UPDATER=1 
 export DXVK_NVAPI_DRS_SETTINGS=NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest
-#show DLSSv4 debug info overlay ingame. to disable set both ENVs to 1
+# show DLSSv4 debug info overlay ingame
+# to disable set DLSSIndicator=1,DLSSGIndicator=1
+# to enable set DLSSIndicator=1024,DLSSGIndicator=2
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS=DLSSIndicator=1024,DLSSGIndicator=2
 # Nvidia cache options
 export __GL_SHADER_DISK_CACHE=1
@@ -177,11 +171,12 @@ export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 # Mesa (AMD/Intel) shader cache options
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
-#NVIDIA custom
+# NVIDIA custom
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
+# just for reference
 export PROTON_DXVK_D3D8="1"
 
 # Optional HUDs
