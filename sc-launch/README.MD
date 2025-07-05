@@ -53,7 +53,7 @@ For installation and setup guidance, see:
 
 - This script is optimized for **NVIDIA GPUs** under **Linux**
 - You still need the original `sc-launch.sh`
-- **Latest DXVK and DXVK/NVAPI is mandatory**
+- Latest 'DXVK' and 'DXVK/NVAPI' is **mandatory**
 - Uses **Wine** and related utilities as described in the StarCitizen-LUG wiki
 - Intended for advanced users who are familiar with Wine and Linux gaming setups
 - This software is provided without any warranty or liability
