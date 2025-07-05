@@ -195,8 +195,8 @@ export PROTON_DXVK_D3D8="1"
 export wine_path=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
 export WINE_PATH=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
 echo "Paths used:"
-echo "$WINEPREFIX"
-echo "$wine_path"
+echo "WINEPREFIX dir: $WINEPREFIX"
+echo "wine_path dir: $wine_path"
 
 #############################################
 # Command line arguments
