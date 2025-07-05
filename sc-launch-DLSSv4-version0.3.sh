@@ -27,7 +27,7 @@ fi
 # Default to no GPU
 VRAM_MB_MINUS_1000=0
 
-# fix for frame drops
+# fix for framedrops
 # Check if an NVIDIA graphics card is present and set VRAM amount to limit memory avaible to SC
 # https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#severe-frame-drops
 if lspci | grep -i nvidia > /dev/null; then
