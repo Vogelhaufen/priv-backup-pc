@@ -103,7 +103,7 @@ else
 fi
 
 
-
+# /usr/lib/libcuda.so hack created by https://github.com/Vingian
 # Check if /usr/lib/libcuda.so changed and patch only if needed
 # https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#dlssdeep-learning-super-sampling--vulkan
 # delete $HOME/.cache/libcuda.so.sha256 to apply the patch again
@@ -132,7 +132,8 @@ fi
 #export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
 
 
-#Create fake DLLs for DLSS
+# create fake DLLs for DLSS
+# we need a valid DLL Header to satisfy SC sanity checks
 echo "Fake DLL Setup for DLSS"
 cd $HOME/Games/star-citizen/drive_c/windows/system32/
 cp xaudio2_2.dll cryptbase.dll
@@ -160,7 +161,7 @@ export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
 #disable EAC
 export EOS_USE_ANTICHEATCLIENTNULL=1
-#Patched cuda
+#patched cuda
 export LD_LIBRARY_PATH=$PATCHED_LIB
 export LD_PRELOAD=$PATCHED_LIB 
 #DLSSv4
