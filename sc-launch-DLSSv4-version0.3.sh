@@ -114,7 +114,7 @@ HASHFILE="$HOME/.cache/libcuda.so.sha256"
 mkdir -p "$(dirname "$HASHFILE")"
 CURRENT_HASH=$(sha256sum "$LIBCUDA_ORIG" | cut -d ' ' -f 1)
 
-if [ ! -f "$HASHFILE" ] || [ "$CURRENT_HASH" != "$(cat "$HASHFILE")" ]; then
+if [ ! -f "$HASHFILE" ] || [ "$CURRENT_HASH" != "$(cat "$HASHFILE")" ] || [ ! -f "$PATCHED_LIB" ]; then
     echo "libcuda.so changed or not yet patched. Patching now..."
     echo -ne $(od -An -tx1 -v "$LIBCUDA_ORIG" | tr -d '\n' | sed -e 's/00 00 00 f8 ff 00 00 00/00 00 00 f8 ff ff 00 00/g' -e 's/ /\\x/g') > "$PATCHED_LIB"
     if [ $? -ne 0 ]; then
