@@ -61,8 +61,10 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicReso
 grep "export WINEPREFIX" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
 
+#justfordebug
 #removeme
-export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
+#snapshotver=1.9
+#export WINEPREFIX="/home/hans/Games/star-citizen-xdd20252nd"
 
 # Download and extract mactan runner only if not already done
 ARCHIVE_PATH="$PWD/runners/mactan103"
