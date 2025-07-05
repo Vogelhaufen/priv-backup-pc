@@ -105,6 +105,7 @@ fi
 
 
 # Check if /usr/lib/libcuda.so changed and patch only if needed
+# https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#dlssdeep-learning-super-sampling--vulkan
 # delete $HOME/.cache/libcuda.so.sha256 to apply the patch again
 LIBCUDA_ORIG="/usr/lib/libcuda.so"
 PATCHED_LIB="$PWD/libcuda.patched.so"
