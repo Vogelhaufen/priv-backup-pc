@@ -44,7 +44,7 @@ if lspci | grep -i nvidia > /dev/null; then
         # Export the variable
         export VRAM_MB_MINUS_1000
         echo "VRAM_MB_MINUS_1000=$VRAM_MB_MINUS_1000"
-        echo "Limiting VRAM avaible for SC to $VRAM_MB_MINUS_1000 MiB"
+        echo "Limiting VRAM avaible to SC to $VRAM_MB_MINUS_1000 MiB"
     else
         echo "nvidia-smi not found. Cannot determine VRAM."
     fi
