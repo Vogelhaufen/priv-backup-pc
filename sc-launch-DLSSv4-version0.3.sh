@@ -124,6 +124,7 @@ fi
 
 
 # create fake DLLs for DLSS
+# ist not hostile to any files since they don't serve a purpose rn
 # we need a valid DLL Header to satisfy SC sanity checks
 echo "Fake DLL Setup for DLSS"
 cd $HOME/Games/star-citizen/drive_c/windows/system32/
