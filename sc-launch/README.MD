@@ -52,14 +52,14 @@ For installation and setup guidance, see:
 ## ✅ Notes
 
 - This script is optimized for **NVIDIA GPUs** under **Linux**
-- Requires **Wine** and related utilities as described in the StarCitizen-LUG wiki
+- Uses **Wine** and related utilities as described in the StarCitizen-LUG wiki
 - Intended for advanced users who are familiar with Wine and Linux gaming setups
 
 ---
 
 ## 📂 File Info
 
-- **Script Name:** `sc-launch-DLSSv4-version0.3.sh`
+- **Script Name:** `sc-launch-DLSS.sh
 - **Version:** 0.3
 
 ---
