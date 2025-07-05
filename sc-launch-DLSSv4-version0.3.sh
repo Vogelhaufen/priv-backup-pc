@@ -133,6 +133,7 @@ sudo modprobe ntsync
 
 #protonfoo / umu; no alien startscripts
 export GAMEID=umu-starcitizen-noPreset-noProton
+export STORE=none
 #disable EAC
 export EOS_USE_ANTICHEATCLIENTNULL=1
 #Patched cuda
