@@ -134,8 +134,11 @@ export WINEDEBUG=-all # Cut down on console debug messages
 #force NTSYNC; fallback E/FSYNC
 export WINEESYNC
 export WINEFSYNC
-
+echo ""
+echo "##################################"
 echo "Please allow sudo to enable NTSYNC"
+echo "##################################"
+echo ""
 sudo modprobe ntsync
 
 #protonfoo / umu; no alien startscripts
