@@ -1,6 +1,6 @@
 # Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
 
-This script is intended to supplement the original `sc-launch.sh`.
+This script is intended to supplement the original `sc-launch.sh`
 
 For installation and setup guidance, see:  
 📎 [StarCitizen-LUG Quick Start Guide](https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide)
@@ -52,7 +52,7 @@ For installation and setup guidance, see:
 ## ✅ Notes
 
 - This script is optimized for **NVIDIA GPUs** under **Linux**
-- You still need the original sc-launch.sh
+- You still need the original `sc-launch.sh`
 - Uses **Wine** and related utilities as described in the StarCitizen-LUG wiki
 - Intended for advanced users who are familiar with Wine and Linux gaming setups
 - This software is provided without any warranty or liability
