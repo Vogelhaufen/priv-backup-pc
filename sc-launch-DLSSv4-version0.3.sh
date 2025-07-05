@@ -63,6 +63,8 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_MB_MINUS_1000;cachedDynamicReso
 
 grep "export WINEPREFIX" sc-launch.sh > $PWD/ENVEXPORT
 source $PWD/ENVEXPORT
+echo "sourcing WINEPREFIX from sc-launch.sh:"
+echo "$WINEPREFIX"
 
 #justfordebug
 #removeme
@@ -89,7 +91,8 @@ fi
 
 
 
-# --- Check if /usr/lib/libcuda.so changed and patch only if needed ---
+# Check if /usr/lib/libcuda.so changed and patch only if needed
+# delete $HOME/.cache/libcuda.so.sha256 to apply the patch again
 LIBCUDA_ORIG="/usr/lib/libcuda.so"
 PATCHED_LIB="$PWD/libcuda.patched.so"
 HASHFILE="$HOME/.cache/libcuda.so.sha256"
@@ -116,6 +119,7 @@ fi
 
 
 #Create fake DLLs for DLSS
+echo "Fake DLL Setup for DLSS"
 cd $HOME/Games/star-citizen/drive_c/windows/system32/
 cp xaudio2_2.dll cryptbase.dll
 cp xaudio2_2.dll devobject.dll
@@ -174,6 +178,9 @@ export PROTON_DXVK_D3D8="1"
 ################################################################
 export wine_path=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
 export WINE_PATH=$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/
+echo "Paths used:"
+echo "$WINEPREFIX"
+echo "$wine_path"
 
 #############################################
 # Command line arguments
