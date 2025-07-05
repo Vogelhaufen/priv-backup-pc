@@ -21,7 +21,7 @@
 # Start the game:
 # sh sc-launch-DLSSv4-version0.3.sh
 #
-# You need a POSIX compliant shell!
+# You need a POSIX compliant shell! Shells like fish destroy the patch function 
 ################################################################################
 
 ################################################################
