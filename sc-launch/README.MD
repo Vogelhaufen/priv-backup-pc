@@ -71,7 +71,7 @@ For installation and setup guidance, see:
 **Q: Why do i need to patch my libcuda.so and tinker with DLLs?**  
 **A:** Here you go: <a href="https://github.com/jp7677/dxvk-nvapi/issues/174#issuecomment-2227462795" target="_blank">Thats</a> <a href="https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#dlssdeep-learning-super-sampling--vulkan" target="_blank">Why</a>
 
-**Q: How do i get rid of the DLSS debug overlay**  
+###**Q: How do i get rid of the DLSS debug overlay**  
 **A:** Look for `export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"` to disable, set `DLSSIndicator=1,DLSSGIndicator=1`
 The variables modify a registry value, which is why simply deleting them is not enough.
 
