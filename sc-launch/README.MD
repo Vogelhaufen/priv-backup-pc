@@ -68,7 +68,7 @@ For installation and setup guidance, see:
 **Q: The ingame DLSS debug overlay is showing DLSS Version 3?**  
 **A:** It is an override. Version 310.x means you're on DLSS Version 4
 
-**Q: Why do i need to patch my libcuda.so and tinker with DLLs?**
+**Q: Why do i need to patch my libcuda.so and tinker with DLLs?**  
 **A:** Here you go: <a href="https://github.com/jp7677/dxvk-nvapi/issues/174#issuecomment-2227462795" target="_blank">Thats</a> <a href="https://github.com/starcitizen-lug/knowledge-base/wiki/Troubleshooting#dlssdeep-learning-super-sampling--vulkan" target="_blank">Why</a>
 
 **Q: How do i get rid of the DLSS debug overlay**  
