@@ -63,7 +63,7 @@ For installation and setup guidance, see:
 ## ✅ Notes
 
 - This script is optimized for **NVIDIA GPUs** under **Linux**
-- You still need the original `sc-launch.sh`
+- You still need the original `sc-launch.sh
 - Latest 'DXVK' and 'DXVK/NVAPI' is **mandatory**
 - Uses **Wine** and related utilities as described in the StarCitizen-LUG wiki
 - Intended for advanced users who are familiar with Wine and Linux gaming setups
@@ -77,7 +77,8 @@ For installation and setup guidance, see:
 **A:** Yeah, its an override. Version 310.x means you're on DLSS Version 4
 
 **Q: How do i get rid of the DLSS debug overlay**  
-**A:** Look for 'export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"' to disable, set 'DLSSIndicator=1,DLSSGIndicator=1'
+**A:** Look for `export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"` to disable, set `DLSSIndicator=1,DLSSGIndicator=1`
+The variables modify a registry value, which is why simply deleting them is not enough.
 
 **Q: Do I need to install Proton or use Steam?**  
 **A:** No. This script is designed for Wine. While Proton is Wine-based, this launcher uses a custom prefix with patched Wine builds optimized for Star Citizen.
