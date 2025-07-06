@@ -255,9 +255,10 @@ fi
 # Proton / umu; no alien startscripts; not in use rn
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
-# disable EAC
+# Disable EAC
 export EOS_USE_ANTICHEATCLIENTNULL=1
-# libcuda.so
+# Libcuda.so
+# Debug: https://github.com/Vingian/libcudatest/blob/main/libcudatest.c
 export LD_LIBRARY_PATH=$PATCHED_LIB
 export LD_PRELOAD=$PATCHED_LIB
 # DLSS Version 4
@@ -272,7 +273,7 @@ export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
-# even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
+# Even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
