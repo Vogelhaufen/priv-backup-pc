@@ -84,23 +84,22 @@ fi
 DXVK_VERSION="2.7"
 DXVK_NVAPI_VERSION="0.9.0"
 
-TMPDIR=$(mktemp -d) || exit 1
-
-# URLs for DXVK and dxvk-nvapi releases
 DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/v${DXVK_VERSION}/dxvk-${DXVK_VERSION}.tar.gz"
 DXVK_NVAPI_URL="https://github.com/jp7677/dxvk-nvapi/releases/download/v${DXVK_NVAPI_VERSION}/dxvk-nvapi-v${DXVK_NVAPI_VERSION}.tar.gz"
 
-download_and_extract() {
-    local url="$1"
-    local dest="$2"
-    local archive="${TMPDIR}/archive.tar.gz"
+VERSION_FILE="$WINEPREFIX/.dxvk_versions"
 
-    echo "Downloading from $url ..."
+download_and_extract() {
+    url="$1"
+    dest="$2"
+    archive="${TMPDIR}/archive.tar.gz"
+
+    printf "Downloading from %s ...\n" "$url"
     curl -sSL "$url" -o "$archive"
 
     # Verify if the downloaded file is a valid gzip archive
     if ! file "$archive" | grep -q 'gzip compressed data'; then
-        echo "❌ Error: Invalid archive downloaded from $url"
+        printf "✘ Error: Invalid archive downloaded from %s\n" "$url"
         rm -rf "$TMPDIR"
         exit 1
     fi
@@ -110,26 +109,42 @@ download_and_extract() {
     tar -xzf "$archive" -C "$dest" --strip-components=1
 }
 
-echo "Updating DXVK to v${DXVK_VERSION} ..."
-download_and_extract "$DXVK_URL" "${TMPDIR}/dxvk"
+check_dxvk_versions() {
+  if [ -f "$VERSION_FILE" ]; then
+    saved_dxvk_version=$(grep "^DXVK=" "$VERSION_FILE" | cut -d= -f2)
+    saved_nvapi_version=$(grep "^NVAPI=" "$VERSION_FILE" | cut -d= -f2)
+    if [ "$saved_dxvk_version" = "$DXVK_VERSION" ] && [ "$saved_nvapi_version" = "$DXVK_NVAPI_VERSION" ]; then
+      return 0
+    fi
+  fi
+  return 1
+}
 
-echo "Copying DXVK files to Wine prefix..."
-cp "${TMPDIR}/dxvk/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
-cp "${TMPDIR}/dxvk/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+if check_dxvk_versions; then
+  printf "✔ DXVK and dxvk-nvapi version %s / %s already installed. Skipping download.\n" "$DXVK_VERSION" "$DXVK_NVAPI_VERSION"
+else
+  TMPDIR=$(mktemp -d) || exit 1
 
-echo "Updating dxvk-nvapi to v${DXVK_NVAPI_VERSION} ..."
-download_and_extract "$DXVK_NVAPI_URL" "${TMPDIR}/dxvk-nvapi"
+  printf "Updating DXVK to v%s ...\n" "$DXVK_VERSION"
+  download_and_extract "$DXVK_URL" "${TMPDIR}/dxvk"
 
-echo "Copying dxvk-nvapi files to Wine prefix..."
-cp "${TMPDIR}/dxvk-nvapi/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
-cp "${TMPDIR}/dxvk-nvapi/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+  printf "Copying DXVK files to Wine prefix...\n"
+  cp "${TMPDIR}/dxvk/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+  cp "${TMPDIR}/dxvk/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
 
-rm -rf "$TMPDIR"
-echo "Update completed."
+  printf "Updating dxvk-nvapi to v%s ...\n" "$DXVK_NVAPI_VERSION"
+  download_and_extract "$DXVK_NVAPI_URL" "${TMPDIR}/dxvk-nvapi"
 
-# Download and extract Mactan Wine runner if not present
-ARCHIVE_PATH="$PWD/runners/mactan103"
-EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
+  printf "Copying dxvk-nvapi files to Wine prefix...\n"
+  cp "${TMPDIR}/dxvk-nvapi/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+  cp "${TMPDIR}/dxvk-nvapi/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+
+  rm -rf "$TMPDIR"
+  printf "Update completed.\n"
+
+  # Save installed versions
+  printf "DXVK=%s\nNVAPI=%s\n" "$DXVK_VERSION" "$DXVK_NVAPI_VERSION" > "$VERSION_FILE"
+fi
 
 echo "========== Mactan Wine Runner Setup =========="
 if [ -d "$EXTRACT_DIR" ]; then
