@@ -71,10 +71,25 @@ For installation and setup guidance, see:
 
 ---
 
-## 📂 File Info
+## ❓ FAQ
 
-- **Script Name:** sc-launch-DLSS.sh
-- **Version:** It is a shellscript.
+**Q: The ingame DLSS debug overlay is showing DLSS Version 3?**  
+**A:** Yeah, its an override. Version 310.x means you're on DLSS Version 4
+
+**Q: How do i get rid of the DLSS debug overlay**  
+**A:** 
+
+**Q: Do I need to install Proton or use Steam?**  
+**A:** No. This script is designed for Wine. While Proton is Wine-based, this launcher uses a custom prefix with patched Wine builds optimized for Star Citizen.
+
+**Q: Does this work with AMD GPUs?**  
+**A:** It’s specifically optimized for NVIDIA cards due to DLSS integration. AMD users can still try the original `sc-launch.sh` but won’t benefit from DLSS.
+
+**Q: What’s the advantage of this over Lutris or Heroic?**  
+**A:** This launcher gives you full control over the Wine environment and applies patches for common struggles when using NVIDIA GPUs.
+
+**Q: Where do I get `DXVK(/NVAPI)` and patched `libcuda.so`?**  
+**A:** The script does it for you.
 
 ---
 
