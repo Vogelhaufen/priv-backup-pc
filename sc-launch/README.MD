@@ -1,4 +1,4 @@
-# Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
+## Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
 
 This script is intended to supplement the original `sc-launch.sh`
 
