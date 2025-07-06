@@ -175,6 +175,7 @@ export WINEDEBUG=-all
 export WINEESYNC
 export WINEFSYNC
 
+# disabled prompting for now. looks kinda sus 
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
