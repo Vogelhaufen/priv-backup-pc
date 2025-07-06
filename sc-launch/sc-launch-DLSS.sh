@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 ################################################################################
 # Star Citizen Linux Launcher Script optimized for NVIDIA GPUs
@@ -166,10 +166,18 @@ export WINEDEBUG=-all
 export WINEESYNC
 export WINEFSYNC
 
-echo ""
-echo "========== Loading Kernel Module for NTSYNC =========="
-echo "Please enter your sudo password if prompted."
-sudo modprobe ntsync
+echo "========== Loading ntsync kernel module =========="
+if lsmod | grep -q ntsync; then
+  echo "✔ ntsync already loaded."
+else
+  if sudo -n modprobe ntsync 2>/dev/null; then
+    echo "✔ ntsync loaded without password prompt."
+  else
+    echo "✘ Failed to load ntsync without prompt."
+    echo "Please run 'sudo modprobe ntsync' manually and re-run this script."
+    exit 1
+  fi
+fi
 
 # Proton / umu; no alien startscripts; not in use rn
 export GAMEID=umu-starcitizen-noPreset-noProton
