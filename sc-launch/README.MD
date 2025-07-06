@@ -103,6 +103,7 @@ The variables modify a registry value, which is why simply deleting them is not 
 This script is shared for community use. Please credit the original contributors.  
 All trademarks and game content belong to Cloud Imperium Games and their respective owners.
 
+Check COPYING.WTFPL for further Information.
 ---
 
 ## 💬 Support
