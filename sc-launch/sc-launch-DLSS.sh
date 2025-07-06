@@ -54,50 +54,6 @@ if ! lspci | grep -iq nvidia; then
 fi
 echo "✔ NVIDIA GPU detected."
 
-#------------------------------------#
-# DXVK and DXVK-NVAPI automatic update check
-DXVK_DIR="$WINEPREFIX/dxvk"
-DXVK_NVAPI_DIR="$WINEPREFIX/dxvk-nvapi"
-DXVK_REPO="https://github.com/doitsujin/dxvk/releases/latest"
-DXVK_NVAPI_REPO="https://github.com/Sporif/dxvk-nvapi/releases/latest"
-
-update_dxvk() {
-  echo "========== Checking and updating DXVK =========="
-  tmp_dir=$(mktemp -d) || { echo "Failed to create temp dir"; return 1; }
-  cd "$tmp_dir" || return 1
-
-  wget -qO dxvk.tar.gz "$DXVK_REPO/download/dxvk-1.10.6.tar.gz" || { echo "Failed to download DXVK"; cd -; rm -rf "$tmp_dir"; return 1; }
-  tar -xf dxvk.tar.gz || { echo "Failed to extract DXVK"; cd -; rm -rf "$tmp_dir"; return 1; }
-
-  if [ ! -d "$DXVK_DIR" ]; then
-    mkdir -p "$DXVK_DIR"
-  fi
-  cp -r dxvk-1.10.6/x64/* "$DXVK_DIR/" || { echo "Failed to copy DXVK files"; cd -; rm -rf "$tmp_dir"; return 1; }
-  cd - >/dev/null || return 1
-  rm -rf "$tmp_dir"
-  echo "✔ DXVK updated."
-}
-
-update_dxvk_nvapi() {
-  echo "========== Checking and updating DXVK-NVAPI =========="
-  tmp_dir=$(mktemp -d) || { echo "Failed to create temp dir"; return 1; }
-  cd "$tmp_dir" || return 1
-
-  wget -qO dxvk-nvapi.tar.gz "$DXVK_NVAPI_REPO/download/dxvk-nvapi-0.5.6.tar.gz" || { echo "Failed to download DXVK-NVAPI"; cd -; rm -rf "$tmp_dir"; return 1; }
-  tar -xf dxvk-nvapi.tar.gz || { echo "Failed to extract DXVK-NVAPI"; cd -; rm -rf "$tmp_dir"; return 1; }
-
-  if [ ! -d "$DXVK_NVAPI_DIR" ]; then
-    mkdir -p "$DXVK_NVAPI_DIR"
-  fi
-  cp -r dxvk-nvapi-0.5.6/x64/* "$DXVK_NVAPI_DIR/" || { echo "Failed to copy DXVK-NVAPI files"; cd -; rm -rf "$tmp_dir"; return 1; }
-  cd - >/dev/null || return 1
-  rm -rf "$tmp_dir"
-  echo "✔ DXVK-NVAPI updated."
-}
-
-update_dxvk
-update_dxvk_nvapi
-
 echo "========== VRAM Limiting =========="
 VRAM_LIMIT_MB=0
 if command -v nvidia-smi > /dev/null; then
