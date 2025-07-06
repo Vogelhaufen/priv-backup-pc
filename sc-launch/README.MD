@@ -98,6 +98,9 @@ The variables modify a registry value, which is why simply deleting them is not 
 **Q: Does disabling EAC get me banned?**  
 **A:** EAC is not enforced on LIVE but on PTU. Unlikely.
 
+**Q:  Direct3D 11 or Vulkan?**  
+**A:** Vulkan is considered beta. It is crashing on startup but after that its working for me. Direct3D 11 is the stable choice.
+
 ---
 
 ## 📜 License
