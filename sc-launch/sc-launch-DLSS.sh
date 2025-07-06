@@ -81,6 +81,7 @@ else
   exit 1
 fi
 
+echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
 DXVK_VERSION="2.7"
 DXVK_NVAPI_VERSION="0.9.0"
 
