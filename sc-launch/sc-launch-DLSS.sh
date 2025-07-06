@@ -80,67 +80,90 @@ else
   echo "✘ [ERROR] $SC_LAUNCH_SCRIPT not found in $PWD"
   exit 1
 fi
+# --- Start DXVK and dxvk-nvapi update check and install ---
 
-################################################################################
-# START DXVK / DXVK-nvapi AUTOMATIC UPDATE CHECK & INSTALLATION SNIPPET
-################################################################################
+DXVK_VERSION_FILE="$WINEPREFIX/dxvk.version"
+DXVK_NVAPI_VERSION_FILE="$WINEPREFIX/dxvk-nvapi.version"
 
-DXVK_BASE_URL="https://github.com/doitsujin/dxvk/releases/latest/download"
-DXVK_PREFIX="$WINEPREFIX/dxvk"
+DXVK_API_URL="https://api.github.com/repos/doitsujin/dxvk/releases/latest"
+DXVK_NVAPI_API_URL="https://api.github.com/repos/jp7677/dxvk-nvapi/releases/latest"
 
-mkdir -p "$DXVK_PREFIX"
-
+# Helper: get latest release tag from GitHub API
 get_latest_version() {
-  # Fetch latest tag from GitHub API (simplified)
-  curl -sI https://github.com/doitsujin/dxvk/releases/latest | grep -i location | sed -E 's#.*/tag/v?([^/]+)#\1#I' | tr -d '\r\n'
+  curl -s "$1" | grep '"tag_name":' | head -n1 | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
-install_dxvk() {
-  version="$1"
-  archive="dxvk-$version.tar.gz"
-  tmpdir=$(mktemp -d)
-
-  echo "⭳ Downloading DXVK version $version..."
-  curl -L "$DXVK_BASE_URL/$archive" -o "$tmpdir/$archive"
-
-  echo "🗜 Extracting DXVK..."
-  tar -xf "$tmpdir/$archive" -C "$tmpdir"
-
-  echo "💾 Installing DXVK into prefix $WINEPREFIX..."
-  "$tmpdir/dxvk-$version/setup_dxvk.sh" install --no-dxgi --no-rollback --symlink --prefix "$WINEPREFIX"
-
-  # Copy nvapi dlls to appropriate syswow64 folder for 32-bit support
-  mkdir -p "$WINEPREFIX/drive_c/windows/syswow64"
-  cp -v "$tmpdir/dxvk-$version/x32/dxvk-nvapi.dll" "$WINEPREFIX/drive_c/windows/syswow64/"
-  cp -v "$tmpdir/dxvk-$version/x64/dxvk-nvapi.dll" "$WINEPREFIX/drive_c/windows/system32/"
-
-  # Save installed version info hidden with suffix
-  echo "$version" > "$DXVK_PREFIX/.version_info.dxvk"
-  rm -rf "$tmpdir"
-}
-
-check_and_update_dxvk() {
-  latest_version=$(get_latest_version)
-  echo "🔍 Latest DXVK version detected: $latest_version"
-
-  installed_version=""
-  if [ -f "$DXVK_PREFIX/.version_info.dxvk" ]; then
-    installed_version=$(cat "$DXVK_PREFIX/.version_info.dxvk")
-  fi
-
-  if [ "$latest_version" != "$installed_version" ]; then
-    echo "⬆ Updating DXVK from version '${installed_version:-none}' to '$latest_version'..."
-    install_dxvk "$latest_version"
+# Check if all required DLLs exist for dxvk or dxvk-nvapi in system32 or syswow64
+check_dlls_exist() {
+  base_dir="$WINEPREFIX/drive_c/windows"
+  if [ "$1" = "dxvk" ]; then
+    dlls=(dxgi.dll d3d11.dll d3d10.dll)
   else
-    echo "✔ DXVK is up to date (version $installed_version)."
+    dlls=(nvapi.dll nvapi64.dll)
   fi
+
+  for dll in "${dlls[@]}"; do
+    if [ ! -f "$base_dir/system32/$dll" ] && [ ! -f "$base_dir/syswow64/$dll" ]; then
+      return 1
+    fi
+  done
+  return 0
 }
 
-check_and_update_dxvk
+# Read installed versions
+installed_dxvk_version=""
+installed_dxvk_nvapi_version=""
+[ -f "$DXVK_VERSION_FILE" ] && installed_dxvk_version=$(cat "$DXVK_VERSION_FILE")
+[ -f "$DXVK_NVAPI_VERSION_FILE" ] && installed_dxvk_nvapi_version=$(cat "$DXVK_NVAPI_VERSION_FILE")
 
-################################################################################
-# END DXVK / DXVK-nvapi AUTOMATIC UPDATE CHECK & INSTALLATION SNIPPET
-################################################################################
+# Get latest versions
+latest_dxvk_version=$(get_latest_version "$DXVK_API_URL")
+latest_dxvk_nvapi_version=$(get_latest_version "$DXVK_NVAPI_API_URL")
+
+# Decide if update needed
+update_dxvk=0
+update_dxvk_nvapi=0
+
+check_dlls_exist "dxvk"
+if [ "$installed_dxvk_version" != "$latest_dxvk_version" ] || [ $? -ne 0 ]; then
+  update_dxvk=1
+fi
+
+check_dlls_exist "dxvk-nvapi"
+if [ "$installed_dxvk_nvapi_version" != "$latest_dxvk_nvapi_version" ] || [ $? -ne 0 ]; then
+  update_dxvk_nvapi=1
+fi
+
+# Download & install DXVK if update needed
+if [ $update_dxvk -eq 1 ]; then
+  echo "Updating DXVK to $latest_dxvk_version ..."
+  tmpfile=$(mktemp)/dxvk.tar.gz
+  curl -L -o "$tmpfile" "https://github.com/doitsujin/dxvk/releases/download/$latest_dxvk_version/dxvk-$latest_dxvk_version.tar.gz"
+  tar -xzf "$tmpfile" -C "$WINEPREFIX"
+  # Copy DLLs to system32 and syswow64
+  cp "$WINEPREFIX/dxvk-$latest_dxvk_version/x64/"*.dll "$WINEPREFIX/drive_c/windows/system32/"
+  cp "$WINEPREFIX/dxvk-$latest_dxvk_version/x32/"*.dll "$WINEPREFIX/drive_c/windows/syswow64/"
+  rm -rf "$WINEPREFIX/dxvk-$latest_dxvk_version"
+  rm "$tmpfile"
+  echo "$latest_dxvk_version" > "$DXVK_VERSION_FILE"
+fi
+
+# Download & install dxvk-nvapi if update needed
+if [ $update_dxvk_nvapi -eq 1 ]; then
+  echo "Updating dxvk-nvapi to $latest_dxvk_nvapi_version ..."
+  tmpfile_nvapi=$(mktemp)/dxvk-nvapi.tar.gz
+  curl -L -o "$tmpfile_nvapi" "https://github.com/jp7677/dxvk-nvapi/releases/download/$latest_dxvk_nvapi_version/dxvk-nvapi-$latest_dxvk_nvapi_version.tar.gz"
+  tar -xzf "$tmpfile_nvapi" -C "$WINEPREFIX"
+  # Copy DLLs to system32 and syswow64
+  cp "$WINEPREFIX/dxvk-nvapi-$latest_dxvk_nvapi_version/x64/"*.dll "$WINEPREFIX/drive_c/windows/system32/"
+  cp "$WINEPREFIX/dxvk-nvapi-$latest_dxvk_nvapi_version/x32/"*.dll "$WINEPREFIX/drive_c/windows/syswow64/"
+  rm -rf "$WINEPREFIX/dxvk-nvapi-$latest_dxvk_nvapi_version"
+  rm "$tmpfile_nvapi"
+  echo "$latest_dxvk_nvapi_version" > "$DXVK_NVAPI_VERSION_FILE"
+fi
+
+# --- End DXVK and dxvk-nvapi update check and install ---
+
 
 # Download and extract Mactan Wine runner if not present
 ARCHIVE_PATH="$PWD/runners/mactan103"
