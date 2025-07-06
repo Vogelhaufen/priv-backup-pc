@@ -278,8 +278,8 @@ export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
-# disable iGPU
-# check the wiki for devicefilters when its not enough
+# Disable iGPU
+# Check the wiki for devicefilters when it is not enough
 export __NV_PRIME_RENDER_OFFLOAD=1
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __VK_LAYER_NV_optimus=NVIDIA_only
