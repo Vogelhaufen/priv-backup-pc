@@ -137,7 +137,7 @@ fi
 # Download & install DXVK if update needed
 if [ $update_dxvk -eq 1 ]; then
   echo "Updating DXVK to $latest_dxvk_version ..."
-  tmpfile=$(mktemp)/dxvk.tar.gz
+  tmpfile=$(mktemp /dxvk.blob.tar.gz)
   curl -L -o "$tmpfile" "https://github.com/doitsujin/dxvk/releases/download/$latest_dxvk_version/dxvk-$latest_dxvk_version.tar.gz"
   tar -xzf "$tmpfile" -C "$WINEPREFIX"
   # Copy DLLs to system32 and syswow64
@@ -151,7 +151,7 @@ fi
 # Download & install dxvk-nvapi if update needed
 if [ $update_dxvk_nvapi -eq 1 ]; then
   echo "Updating dxvk-nvapi to $latest_dxvk_nvapi_version ..."
-  tmpfile_nvapi=$(mktemp)/dxvk-nvapi.tar.gz
+  tmpfile_nvapi=$(mktemp /dxvk-nvapi.blob.tar.gz)
   curl -L -o "$tmpfile_nvapi" "https://github.com/jp7677/dxvk-nvapi/releases/download/$latest_dxvk_nvapi_version/dxvk-nvapi-$latest_dxvk_nvapi_version.tar.gz"
   tar -xzf "$tmpfile_nvapi" -C "$WINEPREFIX"
   # Copy DLLs to system32 and syswow64
