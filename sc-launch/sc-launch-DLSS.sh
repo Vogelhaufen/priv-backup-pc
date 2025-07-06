@@ -238,7 +238,7 @@ export WINEDEBUG=-all
 export WINEESYNC
 export WINEFSYNC
 
-# disabled prompting for now. looks kinda sus 
+# disabled prompting for now. looks kinda sus in game starter
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
