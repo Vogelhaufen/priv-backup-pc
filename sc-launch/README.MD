@@ -11,19 +11,26 @@ For installation and setup guidance, see:
 
 ```text
 ################################################################################
-# Star Citizen Linux Launcher Script optimized for NVIDIA GPUs
-# This script is intended to supplement the original sc-launch.sh
+# Star Citizen Linux Launcher Script — NVIDIA GPU Optimization with DLSS Version4
 #
-# https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide
+# Purpose:
+#   This script serves as a complementary launcher to the original sc-launch.sh,
+#   specifically tailored to enhance Star Citizen performance on Linux systems
+#   equipped with NVIDIA GPUs. It automates environment setup, applies critical
+#   patches, and configures Wine for optimal compatibility and DLSS integration.
+#
+# Documentation:
+#   For detailed usage instructions and troubleshooting, visit:
+#   https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide
 #
 # Features:
-# - Auto-installs Mactan wine 10.3 (staging build)
-# - Detects and limits VRAM for performance
-# - Applies Wine patches (mouse cursor fix, infinite loading fix)
-# - Sets up fake DLLs for DLSS Version 4 compatibility
-# - Patches libcuda.so to enable DLSS Version 4
-# - Provides Wine shell, config, and controller setup options
-# - Auto-handles wine prefix management and logging
+#   • Automatic installation of Mactan Wine 10.3 staging build
+#   • VRAM detection and limiting to maintain system stability and performance
+#   • Application of essential Wine patches including mouse cursor and loading fixes
+#   • Deployment of fake DLLs to enable DLSS functionality
+#   • Patching of libcuda.so to enable DLSS functionality
+#   • Access to Wine shell, configuration, and controller setup utilities
+#   • Automated management of Wine prefixes and logging for streamlined operation
 ################################################################################
 ```
 
@@ -33,17 +40,21 @@ For installation and setup guidance, see:
 
 ```text
 ################################################################################
-# Install:
-# Download this script to your SC Prefix dir. 
-# Default is $HOME/Games/star-citizen
+# Installation Instructions:
+#   1. Place this script inside your Star Citizen Wine prefix directory
+#      typically located at $HOME/Games/star-citizen
 #
-# Make the script executable:
-# chmod +x sc-launch-DLSS.sh
-# 
-# Start the game:
-# sh sc-launch-DLSS.sh
+#   2. Set executable permissions using
+#        chmod +x sc-launch-DLSS.sh
 #
-# You need a POSIX compliant shell! shells like fish destroy the patch function 
+#   3. Execute the script to launch Star Citizen
+#        ./sc-launch-DLSS.sh
+#
+# Notes:
+#   - This script requires a POSIX-compliant shell environment such as bash or sh.
+#     Avoid shells such as fish that may not support necessary shell functions.
+#   - Administrative privileges may be requested during execution for kernel module
+#     loading and system-level operations.
 ################################################################################
 ```
 
