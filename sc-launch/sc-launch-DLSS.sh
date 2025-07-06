@@ -82,7 +82,8 @@ else
 fi
 
 echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
-DXVK_VERSION="2.7"
+# Hardcoded VERSION for downgrades
+DXVK_VERSION="2.7" 
 DXVK_NVAPI_VERSION="0.9.0"
 
 DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/v${DXVK_VERSION}/dxvk-${DXVK_VERSION}.tar.gz"
@@ -271,12 +272,14 @@ export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
+# even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
-# disable iGPUs
+# disable iGPU
+# check the wiki for devicefilters when its not enough
 export __NV_PRIME_RENDER_OFFLOAD=1
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __VK_LAYER_NV_optimus=NVIDIA_only
