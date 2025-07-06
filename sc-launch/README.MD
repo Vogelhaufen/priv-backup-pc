@@ -74,7 +74,7 @@ For installation and setup guidance, see:
 ## ❓ FAQ
 
 **Q: The ingame DLSS debug overlay is showing DLSS Version 3?**  
-**A:** Yeah, its an override. Version 310.x means you're on DLSS Version 4
+**A:** It is an override. Version 310.x means you're on DLSS Version 4
 
 **Q: How do i get rid of the DLSS debug overlay**  
 **A:** Look for `export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"` to disable, set `DLSSIndicator=1,DLSSGIndicator=1`
