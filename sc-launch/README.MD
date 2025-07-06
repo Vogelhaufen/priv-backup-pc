@@ -77,7 +77,7 @@ For installation and setup guidance, see:
 **A:** Yeah, its an override. Version 310.x means you're on DLSS Version 4
 
 **Q: How do i get rid of the DLSS debug overlay**  
-**A:** 
+**A:** Look for 'export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"' to disable, set 'DLSSIndicator=1,DLSSGIndicator=1'
 
 **Q: Do I need to install Proton or use Steam?**  
 **A:** No. This script is designed for Wine. While Proton is Wine-based, this launcher uses a custom prefix with patched Wine builds optimized for Star Citizen.
