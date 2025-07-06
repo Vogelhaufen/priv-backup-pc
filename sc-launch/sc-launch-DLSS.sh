@@ -81,6 +81,52 @@ else
   exit 1
 fi
 
+DXVK_VERSION="2.7"
+DXVK_NVAPI_VERSION="0.9.0"
+
+TMPDIR=$(mktemp -d) || exit 1
+
+# URLs for DXVK and dxvk-nvapi releases
+DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/v${DXVK_VERSION}/dxvk-${DXVK_VERSION}.tar.gz"
+DXVK_NVAPI_URL="https://github.com/jp7677/dxvk-nvapi/releases/download/v${DXVK_NVAPI_VERSION}/dxvk-nvapi-v${DXVK_NVAPI_VERSION}.tar.gz"
+
+download_and_extract() {
+    local url="$1"
+    local dest="$2"
+    local archive="${TMPDIR}/archive.tar.gz"
+
+    echo "Downloading from $url ..."
+    curl -sSL "$url" -o "$archive"
+
+    # Verify if the downloaded file is a valid gzip archive
+    if ! file "$archive" | grep -q 'gzip compressed data'; then
+        echo "❌ Error: Invalid archive downloaded from $url"
+        rm -rf "$TMPDIR"
+        exit 1
+    fi
+
+    mkdir -p "$dest"
+    # Extract the archive, stripping the top-level folder
+    tar -xzf "$archive" -C "$dest" --strip-components=1
+}
+
+echo "Updating DXVK to v${DXVK_VERSION} ..."
+download_and_extract "$DXVK_URL" "${TMPDIR}/dxvk"
+
+echo "Copying DXVK files to Wine prefix..."
+cp "${TMPDIR}/dxvk/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+cp "${TMPDIR}/dxvk/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+
+echo "Updating dxvk-nvapi to v${DXVK_NVAPI_VERSION} ..."
+download_and_extract "$DXVK_NVAPI_URL" "${TMPDIR}/dxvk-nvapi"
+
+echo "Copying dxvk-nvapi files to Wine prefix..."
+cp "${TMPDIR}/dxvk-nvapi/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+cp "${TMPDIR}/dxvk-nvapi/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+
+rm -rf "$TMPDIR"
+echo "Update completed."
+
 # Download and extract Mactan Wine runner if not present
 ARCHIVE_PATH="$PWD/runners/mactan103"
 EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
