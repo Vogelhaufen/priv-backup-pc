@@ -81,6 +81,67 @@ else
   exit 1
 fi
 
+################################################################################
+# START DXVK / DXVK-nvapi AUTOMATIC UPDATE CHECK & INSTALLATION SNIPPET
+################################################################################
+
+DXVK_BASE_URL="https://github.com/doitsujin/dxvk/releases/latest/download"
+DXVK_PREFIX="$WINEPREFIX/dxvk"
+
+mkdir -p "$DXVK_PREFIX"
+
+get_latest_version() {
+  # Fetch latest tag from GitHub API (simplified)
+  curl -sI https://github.com/doitsujin/dxvk/releases/latest | grep -i location | sed -E 's#.*/tag/v?([^/]+)#\1#I' | tr -d '\r\n'
+}
+
+install_dxvk() {
+  version="$1"
+  archive="dxvk-$version.tar.gz"
+  tmpdir=$(mktemp -d)
+
+  echo "⭳ Downloading DXVK version $version..."
+  curl -L "$DXVK_BASE_URL/$archive" -o "$tmpdir/$archive"
+
+  echo "🗜 Extracting DXVK..."
+  tar -xf "$tmpdir/$archive" -C "$tmpdir"
+
+  echo "💾 Installing DXVK into prefix $WINEPREFIX..."
+  "$tmpdir/dxvk-$version/setup_dxvk.sh" install --no-dxgi --no-rollback --symlink --prefix "$WINEPREFIX"
+
+  # Copy nvapi dlls to appropriate syswow64 folder for 32-bit support
+  mkdir -p "$WINEPREFIX/drive_c/windows/syswow64"
+  cp -v "$tmpdir/dxvk-$version/x32/dxvk-nvapi.dll" "$WINEPREFIX/drive_c/windows/syswow64/"
+  cp -v "$tmpdir/dxvk-$version/x64/dxvk-nvapi.dll" "$WINEPREFIX/drive_c/windows/system32/"
+
+  # Save installed version info hidden with suffix
+  echo "$version" > "$DXVK_PREFIX/.version_info.dxvk"
+  rm -rf "$tmpdir"
+}
+
+check_and_update_dxvk() {
+  latest_version=$(get_latest_version)
+  echo "🔍 Latest DXVK version detected: $latest_version"
+
+  installed_version=""
+  if [ -f "$DXVK_PREFIX/.version_info.dxvk" ]; then
+    installed_version=$(cat "$DXVK_PREFIX/.version_info.dxvk")
+  fi
+
+  if [ "$latest_version" != "$installed_version" ]; then
+    echo "⬆ Updating DXVK from version '${installed_version:-none}' to '$latest_version'..."
+    install_dxvk "$latest_version"
+  else
+    echo "✔ DXVK is up to date (version $installed_version)."
+  fi
+}
+
+check_and_update_dxvk
+
+################################################################################
+# END DXVK / DXVK-nvapi AUTOMATIC UPDATE CHECK & INSTALLATION SNIPPET
+################################################################################
+
 # Download and extract Mactan Wine runner if not present
 ARCHIVE_PATH="$PWD/runners/mactan103"
 EXTRACT_DIR="$PWD/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64"
