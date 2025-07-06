@@ -90,7 +90,7 @@ The variables modify a registry value, which is why simply deleting them is not 
 **A:** This launcher gives you full control over the Wine environment and applies patches for common struggles when using NVIDIA GPUs.
 
 **Q: Where do I get `DXVK(/NVAPI)` and patched `libcuda.so`?**  
-**A:** The script does it for you.
+**A:** The script does it for you. Refer to the LUG Wiki for more information.
 
 ---
 
