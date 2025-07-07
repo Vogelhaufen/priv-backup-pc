@@ -128,15 +128,15 @@ else
   download_and_extract "$DXVK_URL" "${TMPDIR}/dxvk"
 
   printf "Copying DXVK files to Wine prefix...\n"
-  cp "${TMPDIR}/dxvk/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
-  cp "${TMPDIR}/dxvk/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+  cp -f "${TMPDIR}/dxvk/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+  cp -f "${TMPDIR}/dxvk/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
 
   printf "Updating dxvk-nvapi to v%s ...\n" "$DXVK_NVAPI_VERSION"
   download_and_extract "$DXVK_NVAPI_URL" "${TMPDIR}/dxvk-nvapi"
 
   printf "Copying dxvk-nvapi files to Wine prefix...\n"
-  cp "${TMPDIR}/dxvk-nvapi/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
-  cp "${TMPDIR}/dxvk-nvapi/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
+  cp -f "${TMPDIR}/dxvk-nvapi/x64/"*.dll "${WINEPREFIX}/drive_c/windows/system32/"
+  cp -f "${TMPDIR}/dxvk-nvapi/x32/"*.dll "${WINEPREFIX}/drive_c/windows/syswow64/"
 
   rm -rf "$TMPDIR"
   printf "Update completed.\n"
