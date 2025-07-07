@@ -11,16 +11,19 @@ set -euo pipefail
 FAKE_ROOT="$HOME/fake-root/usr"
 REAL_LIB_DIRS=(/usr/lib /usr/lib32 /usr/lib64)
 
-# Dependencies
-command -v parallel >/dev/null || { echo "GNU parallel is required"; exit 1; }
+# Ensure GNU parallel is available
+command -v parallel >/dev/null || {
+  echo "❌ GNU parallel is required but not installed."
+  exit 1
+}
 
 # Start
 echo "Creating fake root at: $FAKE_ROOT"
 mkdir -p "$FAKE_ROOT"
 
 for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
-  REL_BASE=$(basename "$REAL_DIR")
-  TARGET_BASE="$FAKE_ROOT/$REL_BASE"
+  # Compute relative path under /usr (e.g., lib, lib32, lib64)
+  TARGET_BASE="$FAKE_ROOT/${REAL_DIR#/usr/}"
   echo "→ Processing $REAL_DIR → $TARGET_BASE"
   mkdir -p "$TARGET_BASE"
 
@@ -28,7 +31,7 @@ for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
   find "$REAL_DIR" -type d 2>/dev/null | sed "s|^$REAL_DIR|$TARGET_BASE|" | \
     parallel --no-notice --bar mkdir -p
 
-  # Create symlinks (skip libcuda*)
+  # Create symlinks for files (skip libcuda.so*)
   find "$REAL_DIR" -type f ! -name 'libcuda.so*' 2>/dev/null | \
     parallel --no-notice --bar --jobs 128 '
       SRC="{}"
@@ -38,4 +41,4 @@ for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
     '
 done
 
-echo "✅ Done. Symlinks created in $FAKE_ROOT"
+echo "✅ All symlinks created in: $FAKE_ROOT"
