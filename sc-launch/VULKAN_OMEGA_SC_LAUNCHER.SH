@@ -54,9 +54,9 @@ fi
 # nvidia-smi -lgc 2100,2100  # Uncomment + change if you know your GPU's limit
 
 # Disable desktop compositor (Wayland or X11)
-if command -v gnome-extensions &>/dev/null; then
-  gnome-extensions disable background-logo@gnome-shell-extensions.gcampax.github.com || true
-fi
+#if command -v gnome-extensions &>/dev/null; then
+#  gnome-extensions disable background-logo@gnome-shell-extensions.gcampax.github.com || true
+#fi
 
 # === DEBUG OPTIONS ===
 # Uncomment to get verbose Vulkan debug info (useful for testing)
