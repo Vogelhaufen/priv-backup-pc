@@ -228,7 +228,7 @@ done
 # Export Wine-related environment variables
 echo "========== Configuring Wine Environment =========="
 launch_log="$WINEPREFIX/sc-launch.log"
-export WINEDLLOVERRIDES="d3d10core,d3d11,d3d8,d3d9,dxgi,nvapi,nvapi64,nvofapi64=n;winemenubuilder="
+export WINEDLLOVERRIDES="d3d10core=n,d3d11=n,d3d8=n,d3d9=n,dxgi=n,nvapi=n,nvapi64=n,nvofapi64=n;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
 export WINEDEBUG=-all
 # force NTSYNC, E/FSYNC fallback
