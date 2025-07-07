@@ -13,7 +13,7 @@ REAL_LIB_DIRS=(/usr/lib /usr/lib32 /usr/lib64)
 
 # Ensure GNU parallel is available
 command -v parallel >/dev/null || {
-  echo "❌ GNU parallel is required but not installed."
+  echo " GNU parallel is required but not installed."
   exit 1
 }
 
@@ -41,4 +41,4 @@ for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
     '
 done
 
-echo "✅ All symlinks created in: $FAKE_ROOT"
+echo "All symlinks created in: $FAKE_ROOT"
