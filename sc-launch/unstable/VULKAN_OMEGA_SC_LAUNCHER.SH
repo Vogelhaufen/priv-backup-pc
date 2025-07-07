@@ -14,7 +14,7 @@ RESET='\033[0m'
 print_banner() {
   echo -e "${CYAN}"
   echo "==========================================================="
-  echo "  🦇 BATMAN’S OMEGA ULTRA MEGA TURBO HYPER VULKAN NINJA NVIDIA POWER LAUNCHER 9000 🦇"
+  echo "  BATMAN’S OMEGA ULTRA MEGA TURBO HYPER VULKAN NINJA NVIDIA POWER LAUNCHER 9000 "
   echo "==========================================================="
   echo -e "${RESET}"
 }
