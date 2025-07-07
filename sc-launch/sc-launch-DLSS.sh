@@ -337,10 +337,10 @@ export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
 # Disable iGPU
 # Check the wiki for devicefilters when it is not enough
-export __NV_PRIME_RENDER_OFFLOAD=1
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export __VK_LAYER_NV_optimus=NVIDIA_only
-export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+#export __NV_PRIME_RENDER_OFFLOAD=1
+#export __GLX_VENDOR_LIBRARY_NAME=nvidia
+#export __VK_LAYER_NV_optimus=NVIDIA_only
+#export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 
 # Optional HUDs
 # export DXVK_HUD=fps
