@@ -3,7 +3,7 @@
 # export LD_LIBRARY_PATH=$HOME/playground/usr/lib:$HOME/playground/usr/lib64:$HOME/playground/usr/lib32
 # neeeds parallel for faster execution .. its fast... really fast
 # be careful - we need root for this
-# !UNSTABLE/TESTING!
+# !UNSTABLE/TESTING! -  DO NOT USE IT
 
 set -euo pipefail
 
