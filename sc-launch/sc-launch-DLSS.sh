@@ -329,6 +329,13 @@ export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+# Vulkan pipeline cache settings (improves pipeline compilation time)
+export VK_PIPELINE_CACHE_FILE="$HOME/.cache/vulkan_pipeline_cache"
+# Disable Vulkan validation layers for max performance
+export VK_INSTANCE_LAYERS=""
+export VK_LOADER_DEBUG=none
+export VK_ENABLE_BEST_PRACTICES=0
 # Even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
