@@ -285,7 +285,7 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
 done
 
 echo "========== Select Graphics API =========="
-CONFIG_FILE="$PWD/graphics_api_choice.conf"
+CONFIG_FILE="$WINEPREFIX/graphics_api_choice.conf"
 
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
