@@ -27,12 +27,7 @@ export DXVK_ENABLE_D3D11=1
 export DXVK_ENABLE_D3D10=1
 
 # -------- Wine environment --------
-export WINEFSYNC=0
-export WINEESYNC=0
-export WINEDLLOVERRIDES="ntdll.dll=n"
-
-export WINEDEBUG="-all"
-export DXVK_LOG_LEVEL=none
+#covered in another config
 
 # -------- CPU & Misc --------
 export __GL_CPU_AFFINITY=0xFF
