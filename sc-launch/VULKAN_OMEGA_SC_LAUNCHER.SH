@@ -26,6 +26,10 @@ export VK_INSTANCE_LAYERS="VK_LAYER_NV_optimus"
 export __GL_SHADER_DISK_CACHE=1
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 export __GL_SHADER_DISK_CACHE_PATH="${HOME}/.cache/nvidia-ultra-shaders"
+export __GL_GSYNC_ALLOWED=0
+export __GL_FORCE_SWAP_INTERVAL=0
+export __GL_GLSL_OPTIMIZE=1
+export __GL_ALLOW_UNOFFICIAL_PROTOCOL=1
 mkdir -p "$__GL_SHADER_DISK_CACHE_PATH"
 
 # Minimize latency, maximize driver throughput
