@@ -22,7 +22,7 @@ For installation and setup guidance, see:
 #
 # Key Features:
 #   • DLSS v4 integration
-#   • Mactan Wine 10.3 staging
+#   • Mactan Wine staging
 #   • VRAM detection with dynamic limiting for system stability
 #   • Wine patches fixing mouse cursor issues and infinite loading
 #   • Streamlined Wine prefix and logging management
@@ -86,9 +86,6 @@ The variables modify a registry value, which is why simply deleting them is not 
 
 **Q: Where do I get `DXVK(/NVAPI)` and patched `libcuda.so`?**  
 **A:** The script does it for you. Refer to the LUG Wiki for more information.
-
-**Q: Why are you hardcoding Mactan 10.3 wine runner?**  
-**A:** It is the most stable runner for me. Later releases introduced new bugs on my setup.
 
 **Q: Does disabling EAC get me banned?**  
 **A:** EAC is not enforced on LIVE but on PTU. Unlikely.
