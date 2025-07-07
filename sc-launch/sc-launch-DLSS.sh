@@ -146,18 +146,56 @@ else
 fi
 
 echo "========== Mactan Wine Runner Setup =========="
-if [ -d "$EXTRACT_DIR" ]; then
-  echo "✔ Mactan runner already extracted, using existing files."
-else
-  if [ ! -f "$ARCHIVE_PATH" ]; then
-    echo "⭳ Downloading Mactan runner..."
-    wget -O "$ARCHIVE_PATH" https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz
-  else
-    echo "✔ Archive already downloaded."
+
+declare -A WINE_VERSIONS=(
+  ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
+  ["10.8-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.8-git/wine-tkg-staging-ntsync-git-10.8.tar.gz"
+  ["10.7-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.7-git/wine-tkg-staging-ntsync-git-10.7.r0.gedfe4935-327-x86_64.tar.gz"
+  ["10.6-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.6-git/wine-tkg-staging-ntsync-git-10.6.r0.g81425de3-327-x86_64.tar.gz"
+  ["10.3-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz"
+)
+
+BASE_DIR="$PWD/runners"
+EXTRACT_DIR="$BASE_DIR/wine_runner"
+CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
+DEFAULT_VERSION="10.3-git"
+
+mkdir -p "$BASE_DIR"
+
+if [ -f "$CONFIG_FILE" ]; then
+  VERSION=$(cat "$CONFIG_FILE")
+  if [[ ! ${WINE_VERSIONS[$VERSION]+_} ]]; then
+    echo "Saved version '$VERSION' not found in available versions. Removing config."
+    rm -f "$CONFIG_FILE"
+    exit 1
   fi
-  echo "🗜 Extracting Mactan runner..."
-  mkdir -p "$EXTRACT_DIR"
-  tar xfz "$ARCHIVE_PATH" --directory="$EXTRACT_DIR/../"
+  echo "Using saved Wine version: $VERSION"
+else
+  echo "Available Wine versions:"
+  i=1
+  mapfile -t versions_array < <(printf "%s\n" "${!WINE_VERSIONS[@]}" | sort)
+  for v in "${versions_array[@]}"; do
+    echo "  $i) $v"
+    ((i++))
+  done
+  echo "Press Enter to select default version: $DEFAULT_VERSION"
+
+  while true; do
+    read -rp "Enter choice number (or press Enter for default): " choice
+    if [[ -z "$choice" ]]; then
+      VERSION=$DEFAULT_VERSION
+      echo "No choice entered, defaulting to $VERSION."
+      echo "$VERSION" > "$CONFIG_FILE"
+      break
+    elif [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice < i )); then
+      VERSION=${versions_array[$((choice - 1))]}
+      echo "You selected: $VERSION"
+      echo "$VERSION" > "$CONFIG_FILE"
+      break
+    else
+      echo "Invalid input. Please enter a number between 1 and $((i - 1)) or press Enter for default."
+    fi
+  done
 fi
 
 # Find the real 64-bit libcuda.so
@@ -287,7 +325,7 @@ export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 # export DXVK_HUD=fps
 # export MANGOHUD=1
 
-export wine_path="$WINEPREFIX/runners/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64/bin/"
+export wine_path="$WINEPREFIX/runners/wine_runner/bin/"
 export WINE_PATH="$wine_path"
 
 echo "========== Paths used =========="
