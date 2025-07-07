@@ -11,7 +11,7 @@
 #
 # Key Features:
 #   • DLSS v4 integration
-#   • Mactan Wine 10.3 staging
+#   • Mactan Wine staging
 #   • VRAM detection with dynamic limiting for system stability
 #   • Wine patches fixing mouse cursor issues and infinite loading
 #   • Streamlined Wine prefix and logging management
