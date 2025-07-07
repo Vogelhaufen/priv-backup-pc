@@ -333,9 +333,10 @@ export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 # Vulkan pipeline cache settings (improves pipeline compilation time)
 export VK_PIPELINE_CACHE_FILE="$HOME/.cache/vulkan_pipeline_cache"
 # Disable Vulkan validation layers for max performance
-export VK_INSTANCE_LAYERS=""
-export VK_LOADER_DEBUG=none
-export VK_ENABLE_BEST_PRACTICES=0
+# Only for specific setups
+#export VK_INSTANCE_LAYERS=""
+#export VK_LOADER_DEBUG=none
+#export VK_ENABLE_BEST_PRACTICES=0
 # Even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
 export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
@@ -343,6 +344,7 @@ export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
 # Disable iGPU
+# Only for specific setups
 # Check the wiki for devicefilters when it is not enough
 #export __NV_PRIME_RENDER_OFFLOAD=1
 #export __GLX_VENDOR_LIBRARY_NAME=nvidia
