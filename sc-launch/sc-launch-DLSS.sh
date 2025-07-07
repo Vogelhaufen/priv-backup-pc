@@ -11,9 +11,10 @@
 #
 # Key Features:
 #   • DLSS v4 integration
-#   • Mactan Wine staging
+#   • Vulkan / Direct3D 11 Support
+#   • Mactan Wine staging - optimized Wine Runner by the awesome community of LUG
 #   • VRAM detection with dynamic limiting for system stability
-#   • Wine patches fixing mouse cursor issues and infinite loading
+#   • Wine patches fixing mouse cursor issues and infinite loading and much more!
 #   • Streamlined Wine prefix and logging management
 #
 # Installation:
