@@ -1,37 +1,35 @@
 #!/bin/bash
-# symlink everything, replace cuda
-# works with eac
+# fakelib env with symlinks, replace libcuda.so
+# export LD_LIBRARY_PATH=$HOME/playground/usr/lib:$HOME/playground/usr/lib64:$HOME/playground/usr/lib32
+# neeeds parallel for faster execution
 # !UNSTABLE/TESTING!
 
-# Set your fake root
-FAKE_ROOT="$HOME/fake-root/usr"
+set -euo pipefail
 
-# List of real library directories
+FAKE_ROOT="$HOME/playground/usr"
 REAL_LIB_DIRS=(/usr/lib /usr/lib32 /usr/lib64)
 
+mkdir -p "$FAKE_ROOT"
+
 for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
-    RELATIVE_PATH=$(basename "$REAL_DIR")  # e.g., lib, lib32, lib64
-    TARGET_BASE="$FAKE_ROOT/$RELATIVE_PATH"
+  REL_BASE=$(basename "$REAL_DIR")
+  TARGET_BASE="$FAKE_ROOT/$REL_BASE"
+  mkdir -p "$TARGET_BASE"
 
-    # Find all files under REAL_DIR
-    find "$REAL_DIR" -type f | while read -r REAL_FILE; do
-        BASENAME=$(basename "$REAL_FILE")
-        
-        # Skip libcuda.so and any versioned variant (libcuda.so.*, but not libcuda_static.a etc.)
-        if [[ "$BASENAME" == libcuda.so* ]]; then
-            continue
-        fi
+  echo "Processing $REAL_DIR → $TARGET_BASE"
 
-        # Get path relative to REAL_DIR
-        REL_PATH="${REAL_FILE#$REAL_DIR/}"
+  # 1) Create all directories in target in parallel
+  find "$REAL_DIR" -type d | \
+    sed "s|^$REAL_DIR|$TARGET_BASE|" | \
+    xargs -P 200 -I{} mkdir -p {}
 
-        # Compute full target path in fake root
-        TARGET_FILE="$TARGET_BASE/$REL_PATH"
-
-        # Ensure the target directory exists
-        mkdir -p "$(dirname "$TARGET_FILE")"
-
-        # Create symlink
-        ln -s "$REAL_FILE" "$TARGET_FILE"
-    done
+  # 2) Create symlinks for files excluding libcuda.so* in parallel
+  find "$REAL_DIR" -type f ! -name 'libcuda.so*' | \
+    parallel --jobs 200 --no-notice --bar '
+      SRC="{}"
+      DST="'"$TARGET_BASE"'/${SRC#'"$REAL_DIR"'/}"
+      ln -sf "$SRC" "$DST"
+    '
 done
+
+echo "All done!"
