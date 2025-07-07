@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-FAKE_ROOT="$HOME/playground/usr"
+FAKE_ROOT="$HOME/fake-root/usr"
 REAL_LIB_DIRS=(/usr/lib /usr/lib32 /usr/lib64)
 
 mkdir -p "$FAKE_ROOT"
@@ -18,18 +18,16 @@ for REAL_DIR in "${REAL_LIB_DIRS[@]}"; do
 
   echo "Processing $REAL_DIR → $TARGET_BASE"
 
-  # 1) Create all directories in target in parallel
-  find "$REAL_DIR" -type d | \
-    sed "s|^$REAL_DIR|$TARGET_BASE|" | \
-    xargs -P 200 -I{} mkdir -p {}
+  # create directories first
+  find "$REAL_DIR" -type d | sed "s|^$REAL_DIR|$TARGET_BASE|" | xargs -P 64 -I{} mkdir -p {}
 
-  # 2) Create symlinks for files excluding libcuda.so* in parallel
+  # create symlinks for files excluding libcuda.so*
   find "$REAL_DIR" -type f ! -name 'libcuda.so*' | \
-    parallel --jobs 200 --no-notice --bar '
-      SRC="{}"
-      DST="'"$TARGET_BASE"'/${SRC#'"$REAL_DIR"'/}"
-      ln -sf "$SRC" "$DST"
-    '
+  parallel --jobs 128 --no-notice --bar '
+    SRC="{}"
+    DST="'"$TARGET_BASE"'/${SRC#'"$REAL_DIR"'/}"
+    ln -sf "$SRC" "$DST"
+  '
 done
 
-echo "All done!"
+echo "Done!"
