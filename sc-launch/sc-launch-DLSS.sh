@@ -198,6 +198,27 @@ else
   done
 fi
 
+ARCHIVE_URL="${WINE_VERSIONS[$VERSION]}"
+ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.gz"
+
+if [ -d "$EXTRACT_DIR" ]; then
+  echo "✔ Mactan runner already extracted, using existing files."
+else
+  if [ ! -f "$ARCHIVE_PATH" ]; then
+    echo "⭳ Downloading Mactan runner $VERSION..."
+    wget -O "$ARCHIVE_PATH" "$ARCHIVE_URL" || { echo "Download failed! Exiting."; exit 1; }
+  else
+    echo "✔ Archive for $VERSION already downloaded."
+  fi
+
+  echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (stripping top-level directory)..."
+  mkdir -p "$EXTRACT_DIR"
+  tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+fi
+
+echo "Setup complete for Mactan Wine Runner version $VERSION."
+
+
 # Find the real 64-bit libcuda.so
 echo "========== Locating 64-bit libcuda.so =========="
 
