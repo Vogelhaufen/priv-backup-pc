@@ -35,7 +35,6 @@ declare -A env_vars=(
   [NV_DXVK_ENABLE]="1  # Enable NVAPI in DXVK"
   [DXVK_ENABLE_NVAPI]="1  # Enable NVAPI in DXVK"
   [DXVK_ENABLE_D3D11]="1  # Enable D3D11 support in DXVK"
-  [DXVK_ENABLE_D3D10]="1  # Enable D3D10 support in DXVK"
   [WINEFSYNC]="0  # Disable FSYNC (not patched)"
   [WINEESYNC]="0  # Disable ESYNC (using NTsync)"
   [WINEDLLOVERRIDES]="ntdll.dll=n  # Override ntdll in Wine"
