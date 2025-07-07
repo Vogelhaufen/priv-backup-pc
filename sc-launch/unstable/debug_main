@@ -1,0 +1,138 @@
+🎯 Script detected. Using interpreter: /usr/bin/bash
+🔍 Parsing script for external commands...
+→ Found command in script: bash → /usr/bin/bash
+→ Found command in script: break → break
+→ Found command in script: cat → /usr/bin/cat
+→ Found command in script: cd → cd
+→ Found command in script: command → command
+→ Found command in script: complete → complete
+→ Found command in script: cp → /usr/bin/cp
+→ Found command in script: curl → /usr/bin/curl
+→ Found command in script: cut → /usr/bin/cut
+→ Found command in script: date → /usr/bin/date
+→ Found command in script: declare → declare
+→ Found command in script: dir → /usr/bin/dir
+→ Found command in script: dirname → /usr/bin/dirname
+→ Found command in script: echo → echo
+→ Found command in script: elif → elif
+→ Found command in script: export → export
+→ Found command in script: file → /usr/bin/file
+→ Found command in script: find → /usr/bin/find
+→ Found command in script: grep → /usr/bin/grep
+→ Found command in script: gzip → /usr/bin/gzip
+→ Found command in script: head → /usr/bin/head
+→ Found command in script: in → in
+→ Found command in script: info → /usr/bin/info
+→ Found command in script: lsmod → /usr/bin/lsmod
+→ Found command in script: lspci → /usr/bin/lspci
+→ Found command in script: mapfile → mapfile
+→ Found command in script: mkdir → /usr/bin/mkdir
+→ Found command in script: mktemp → /usr/bin/mktemp
+→ Found command in script: modprobe → /usr/bin/modprobe
+→ Found command in script: not → /usr/bin/not
+→ Found command in script: nvidia-smi → /usr/bin/nvidia-smi
+→ Found command in script: od → /usr/bin/od
+→ Found command in script: patch → /usr/bin/patch
+→ Found command in script: printf → printf
+→ Found command in script: read → read
+→ Found command in script: realpath → /usr/bin/realpath
+→ Found command in script: rm → /usr/bin/rm
+→ Found command in script: script → /usr/bin/script
+→ Found command in script: sed → /usr/bin/sed
+→ Found command in script: select → select
+→ Found command in script: sha256sum → /usr/bin/sha256sum
+→ Found command in script: sleep → /usr/bin/sleep
+→ Found command in script: sort → /usr/bin/sort
+→ Found command in script: sudo → /usr/bin/sudo
+→ Found command in script: tar → /usr/bin/tar
+→ Found command in script: tr → /usr/bin/tr
+→ Found command in script: trap → trap
+→ Found command in script: true → true
+→ Found command in script: type → type
+→ Found command in script: wget → /usr/bin/wget
+→ Found command in script: wine → /usr/bin/wine
+→ Found command in script: winecfg → /usr/bin/winecfg
+→ Found command in script: winedbg → /usr/bin/winedbg
+→ Found command in script: wineserver → /usr/bin/wineserver
+→ Explicitly adding wine libs: /usr/bin/wine
+→ Total unique libs found: 51
+→ Linked /usr/lib/librt.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libkrb5support.so.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libattr.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libacl.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libm.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libcurl.so.4 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/sudo/libsudo_util.so.0 to /home/hans/fake-root/usr/lib/sudo/
+→ Linked /usr/lib/libseccomp.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libkrb5.so.3 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib64/ld-linux-x86-64.so.2 to /home/hans/fake-root/usr/lib64/
+→ Linked /usr/lib/libpthread.so.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libpci.so.3 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libbrotlicommon.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libleancrypto.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/liblzma.so.5 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libudev.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libgssapi_krb5.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libnettle.so.8 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libzstd.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libcrypto.so.3 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libnghttp3.so.9 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libk5crypto.so.3 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libuuid.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libmagic.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libcap.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libunistring.so.5 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libncursesw.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libbz2.so.1.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libgnutls.so.30 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libkeyutils.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libcom_err.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libz.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libhogweed.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libc.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libssl.so.3 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libtasn1.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libbrotlidec.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libreadline.so.8 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libresolv.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libstdc++.so.6 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libp11-kit.so.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libffi.so.8 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libpcre2-8.so.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libidn2.so.0 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libkmod.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libgmp.so.10 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libnghttp2.so.14 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libpsl.so.5 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libgcc_s.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libssh2.so.1 to /home/hans/fake-root/usr/lib/
+→ Linked /usr/lib/libdl.so.2 to /home/hans/fake-root/usr/lib/
+→ Linked patched libcuda: /home/hans/Games/star-citizen/libcuda.patched.so → /home/hans/fake-root/usr/lib64/libcuda.so
+✅ Fakeroot environment ready at: /home/hans/fake-root/usr
+▶ Running 'sc-launch-DLSS.sh ' with fakeroot libs in /mnt/m2games/Heroic-N-Lutris/star-citizen-xdd20252nd...
+========== GPU Detection ==========
+✔ NVIDIA GPU detected.
+========== VRAM Limiting ==========
+✔ VRAM detected: 16376 MiB. Limiting to 15376 MiB for Star Citizen.
+========== Loading Wine Prefix ==========
+✔ WINEPREFIX loaded: /home/hans/Games/star-citizen
+========== Checking DXVK and DXVK/NVAPI DLLs ==========
+✔ DXVK and dxvk-nvapi version 2.7 / 0.9.0 already installed. Skipping download.
+========== Mactan Wine Runner Setup ==========
+Using saved Wine version: 10.3-git
+✔ Mactan runner already extracted, using existing files.
+Setup complete for Mactan Wine Runner version 10.3-git. Switching 10.3-git to another wine-runner: rm -rf /mnt/m2games/Heroic-N-Lutris/star-citizen-xdd20252nd/runners
+========== Locating 64-bit libcuda.so ==========
+✔ Found 64-bit libcuda.so at: /usr/lib/libcuda.so.575.64.03
+✔ libcuda.so is already patched and up to date.
+========== Setting up fake DLLs for DLSS ==========
+✔ cryptbase.dll already exists, skipping.
+✔ devobject.dll already exists, skipping.
+✔ drvstore.dll already exists, skipping.
+========== Configuring Wine Environment ==========
+========== Loading ntsync kernel module ==========
+✔ ntsync already loaded.
+========== Paths used ==========
+WINEPREFIX dir: /home/hans/Games/star-citizen
+Wine runner bin dir: /home/hans/Games/star-citizen/runners/wine_runner/bin/
+========== Launching Star Citizen ==========
