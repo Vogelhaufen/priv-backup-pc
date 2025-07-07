@@ -216,8 +216,8 @@ else
   tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
 fi
 
-echo "Setup complete for Mactan Wine Runner version $VERSION. Switching $VERSION to another wine-runner: rm -rf $PWD/runners"
-
+echo "Setup complete for Mactan Wine Runner version $VERSION."
+echo "To switch from $VERSION to another wine-runner: rm -rf rm $PWD/runners/.mactan_wine_version"
 
 # Find the real 64-bit libcuda.so
 echo "========== Locating 64-bit libcuda.so =========="
