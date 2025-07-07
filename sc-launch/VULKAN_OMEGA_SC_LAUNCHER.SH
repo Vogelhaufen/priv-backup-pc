@@ -1,4 +1,5 @@
 #!/bin/bash
+# Dangerous and for debug only - DONT USE IT
 # BATMAN’S OMEGA ULTRA MEGA TURBO HYPER VULKAN NINJA NVIDIA POWER LAUNCHER 9000
 # Ultra-optimized Vulkan + NVIDIA + Wine environment launcher for Wayland gaming
 
