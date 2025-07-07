@@ -1,5 +1,5 @@
 #!/bin/bash
-# fakelib env with symlinks, replace libcuda.so
+# fakelib env with symlinks, replace libcuda.so later
 # export LD_LIBRARY_PATH=$HOME/playground/usr/lib:$HOME/playground/usr/lib64:$HOME/playground/usr/lib32
 # neeeds parallel for faster execution .. its fast... really fast
 # be careful - we need root for this
