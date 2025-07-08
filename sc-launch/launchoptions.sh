@@ -11,10 +11,9 @@
 #
 # Key Features:
 #   • DLSS v4 integration
-#   • Vulkan / Direct3D 11 Support
-#   • Mactan Wine staging - optimized Wine Runner by the awesome community of LUG
+#   • Mactan Wine staging
 #   • VRAM detection with dynamic limiting for system stability
-#   • Wine patches fixing mouse cursor issues and infinite loading and much more!
+#   • Wine patches fixing mouse cursor issues and infinite loading
 #   • Streamlined Wine prefix and logging management
 #
 # Installation:
@@ -285,49 +284,7 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
   fi
 done
 
-echo "========== Select Graphics API =========="
-CONFIG_FILE="$WINEPREFIX/graphics_api_choice.conf"
 
-mkdir -p "$(dirname "$CONFIG_FILE")"
-
-# Load saved choice if config exists
-if [[ -f "$CONFIG_FILE" ]]; then
-    source "$CONFIG_FILE"
-    echo "✔ Using graphics API: ${GRAPHICS_API}"
-    echo "To change this, edit or delete the file: $CONFIG_FILE"
-    echo
-else
-    echo "Select graphics API to use:"
-    echo "1) Vulkan"
-    echo "2) Direct3D 11"
-    echo "3) I don't know (default)"
-    read -p "Enter choice [1-3, default: 3]: " choice
-
-    case "$choice" in
-        1) GRAPHICS_API="vulkan" ;;
-        2) GRAPHICS_API="d3d11" ;;
-        *) GRAPHICS_API="unknown" ;;
-    esac
-
-    echo "GRAPHICS_API=$GRAPHICS_API" > "$CONFIG_FILE"
-    echo "✔ Done."
-fi
-
-# Apply environment variables based on choice
-case "$GRAPHICS_API" in
-    vulkan)
-        export __GL_SHADER_DISK_CACHE=0
-        export LD_PRELOAD="$PATCHED_LIB:/usr/lib/libGLX_nvidia.so.0"
-        ;;
-    d3d11|unknown)
-        export __GL_SHADER_DISK_CACHE=1
-        export LD_PRELOAD="$PATCHED_LIB"
-        ;;
-    *)
-        echo "✘ Invalid graphics API setting in config: $GRAPHICS_API"
-        exit 1
-        ;;
-esac
 
 # Export Wine-related environment variables
 echo "========== Configuring Wine Environment =========="
@@ -357,10 +314,10 @@ fi
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
 # Disable EAC
-export EOS_USE_ANTICHEATCLIENTNULL=1
+export EOS_USE_ANTICHEATCLIENTNULL=0
 # Libcuda.so
 # Debug: https://github.com/Vingian/libcudatest/blob/main/libcudatest.c
-export LD_LIBRARY_PATH=$PATCHED_LIB
+export LD_LIBRARY_PATH=$PWD/usr/lib/libcuda.so
 # DLSS Version 4
 export PROTON_ENABLE_NGX_UPDATER=1
 export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest"
