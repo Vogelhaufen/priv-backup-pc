@@ -220,7 +220,7 @@ else
   fi
 fi
 
-CONFIG_FILE="$HOME/.graphics_api_choice"
+CONFIG_FILE="$HOME/Games/star-citizen/.graphics_api_choice"
 
 # Check if the user has already made a choice
 # We need that cause Vulkan is crashing on NVIDIA without disabling NV-Cache
