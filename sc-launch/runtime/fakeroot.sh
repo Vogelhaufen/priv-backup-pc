@@ -17,8 +17,21 @@ PATCHED_LIB="$HOME/Games/star-citizen/libcuda.patched.so"
 GAME_EXEC="$(realpath "$1")"
 shift
 GAMEDIR="$(dirname "$GAME_EXEC")"
-WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/wayland-0"
 WINEPREFIX="$HOME/Games/star-citizen"
+
+# Dynamic Wayland socket detection
+if [ -n "$WAYLAND_DISPLAY" ] && [ -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY" ]; then
+  WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY"
+else
+  # Auto-detect first available wayland socket
+  for sock in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/wayland-*; do
+    if [ -S "$sock" ]; then
+      WAYLAND_SOCKET="$sock"
+      WAYLAND_DISPLAY="$(basename "$sock")"
+      break
+    fi
+  done
+fi
 
 echo "Preparing sandbox environment for:"
 echo "  Game executable: $GAME_EXEC"
@@ -68,7 +81,7 @@ BWRAP_ARGS=(
   --setenv LD_LIBRARY_PATH /usr/lib
   --setenv HOME "$HOME"
   --setenv PATH "$PATH"
-  --setenv WAYLAND_DISPLAY wayland-0
+  --setenv WAYLAND_DISPLAY "$WAYLAND_DISPLAY"
   --setenv DISPLAY "$DISPLAY"
   --setenv WINEPREFIX "$WINEPREFIX"
 )
