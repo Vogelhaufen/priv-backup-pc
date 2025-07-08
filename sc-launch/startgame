@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Ensure required scripts are executable
+chmod +x "$HOME/Games/star-citizen/fakeroot.sh"
+chmod +x "$HOME/Games/star-citizen/launchoptions.sh"
+chmod +x "$HOME/Games/star-citizen/patchcuda.sh"
+
+
+# Define path to patched CUDA file
+CUDA_PATCH="$HOME/Games/star-citizen/libcuda.patched.so"
+
+# Run patch only if the file doesn't exist
+if [[ ! -f "$CUDA_PATCH" ]]; then
+    echo "Patching libcuda... ($CUDA_PATCH not found)"
+    ./patchcuda.sh  # assuming patchcuda.sh is in the current directory
+else
+    echo "libcuda.patched.so already exists. Skipping patch."
+fi
+
+# Launch the game scripts
+bash "$HOME/Games/star-citizen/fakeroot.sh" "$HOME/Games/star-citizen/launchoptions.sh"
