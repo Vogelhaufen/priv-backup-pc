@@ -98,7 +98,7 @@ The variables modify a registry value, which is why simply deleting them is not 
 **A:** Vulkan is considered beta. (Sometimes) it is crashing when tabbing out but its much smoother. Direct3D 11 is the stable choice!
 
 **Q:  Why are we gaming in a sandbox?**  
-**A:** Because EAC—Easy Anti-Cheat, or as some call it, “Extremely Annoying Code”—throws a fit the moment you try to breathe near a mod. Want better graphics with DLSS patches? Nope, EAC thinks you're plotting a world takeover. So we run the game in a sandbox—basically a digital playpen—where EAC can’t see us committing the heinous crime of trying to make our game look better. It's like tricking a mall cop with mirrored sunglasses. Everyone wins... except EAC, and honestly, we're okay with that.
+**A:** Because EAC—Easy Anti-Cheat, or as some call it, “Extremely Annoying Code”—throws a fit the moment you try to breathe near a mod. Want better graphics with DLSS patches? Nope, EAC thinks you're plotting a world takeover. So we run the game in a sandbox—basically a digital playpen—where EAC can’t see us committing the heinous crime of trying to make our game look better. It's like tricking a mall cop with mirrored sunglasses. Everyone wins... except EAC, and honestly, I'm okay with that.
 
 ---
 
