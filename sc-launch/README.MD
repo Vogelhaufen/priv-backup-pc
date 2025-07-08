@@ -1,4 +1,4 @@
-
+## 🟥❗ CIG is enforcing EAC NOW. Huge script overhaul. ❗🟥
 
 ## Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
 
