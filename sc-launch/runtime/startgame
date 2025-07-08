@@ -14,6 +14,7 @@ fi
 echo "✔ NVIDIA GPU detected."
 
 # Check if bubblewrap is installed
+echo "========== Sandbox Check =========="
 if ! command -v bwrap &> /dev/null; then
     echo "'bubblewrap' (bwrap) is not installed."
     echo "Please install it with your package manager, for example:"
@@ -22,6 +23,8 @@ if ! command -v bwrap &> /dev/null; then
     echo "  - Arch: sudo pacman -S bubblewrap"
     exit 1
 fi
+
+echo "===== Sandbox Check finished ======="
 
 # Ensure required scripts are executable
 chmod +x "$GAME_DIR/fakeroot.sh" "$GAME_DIR/launchoptions.sh" "$GAME_DIR/patchcuda.sh"
