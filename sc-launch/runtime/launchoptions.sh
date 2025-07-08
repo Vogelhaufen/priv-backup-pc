@@ -220,6 +220,41 @@ else
   fi
 fi
 
+CONFIG_FILE="$HOME/.graphics_api_choice"
+
+# Check if the user has already made a choice
+# We need that cause Vulkan is crashing on NVIDIA without disabling NV-Cache
+if [[ -f "$CONFIG_FILE" ]]; then
+    choice=$(<"$CONFIG_FILE")
+    echo "Using saved graphics API choice: $choice"
+    echo "To change this, delete or edit: $CONFIG_FILE"
+else
+    echo "Which graphics API do you want to use?"
+    echo "1) Vulkan"
+    echo "2) Direct3D 11"
+    echo "3) I don't know (default behavior)"
+    read -rp "Enter 1, 2 or 3: " answer
+
+    case "$answer" in
+        1) choice="vulkan" ;;
+        2) choice="d3d11" ;;
+        *) choice="unknown" ;;
+    esac
+
+    echo "$choice" > "$CONFIG_FILE"
+    echo "Saved your choice: $choice"
+fi
+
+# Apply settings based on choice
+case "$choice" in
+    vulkan)
+        export __GL_SHADER_DISK_CACHE=0
+        ;;
+    d3d11|unknown)
+        export __GL_SHADER_DISK_CACHE=1
+        ;;
+esac
+
 # Proton / umu; no alien startscripts; not in use rn
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
@@ -234,7 +269,6 @@ export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,
 # Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 # NVIDIA related
-export __GL_SHADER_DISK_CACHE=0
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
