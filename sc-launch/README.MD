@@ -29,12 +29,14 @@ For installation and setup guidance, see:
 #   • Streamlined Wine prefix and logging management
 #
 # Installation:
-#   1. Place this script inside your Star Citizen Wine prefix directory
+#   1. Place fetch.sh inside your Star Citizen Wine prefix directory
 #      (typically $HOME/Games/star-citizen)
 #   2. Make the script executable:
-#        chmod +x sc-launch-DLSS.sh
-#   3. Launch the game via the script:
-#        ./sc-launch-DLSS.sh
+#        chmod +x fetch.sh
+#   3. Launch the script:
+#        ./fetch.sh
+#   4. Start the game
+#       ./startgame
 #
 # Important Notes:
 #   • Requires a POSIX-compliant shell (bash, sh). Avoid incompatible shells like fish.
