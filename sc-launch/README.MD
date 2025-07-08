@@ -91,9 +91,6 @@ The variables modify a registry value, which is why simply deleting them is not 
 **Q: Where do I get `DXVK(/NVAPI)` and patched `libcuda.so`?**  
 **A:** The script does it for you. Refer to the LUG Wiki for more information.
 
-**Q: Does disabling EAC get me banned?**  
-**A:** EAC is not enforced on LIVE but on PTU. Unlikely.
-
 **Q:  Direct3D 11 or Vulkan?**  
 **A:** Vulkan is considered beta. (Sometimes) it is crashing when tabbing out but its much smoother. Direct3D 11 is the stable choice!
 
