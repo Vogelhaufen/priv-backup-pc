@@ -5,6 +5,14 @@ set -euo pipefail
 GAME_DIR="$HOME/Games/star-citizen"
 CUDA_PATCH="$GAME_DIR/libcuda.patched.so"
 
+# Novideo GPU?
+echo "========== GPU Detection =========="
+if ! lspci | grep -iq nvidia; then
+  echo "✘ No NVIDIA graphics card found. Exiting."
+  exit 1
+fi
+echo "✔ NVIDIA GPU detected."
+
 # Check if bubblewrap is installed
 if ! command -v bwrap &> /dev/null; then
     echo "'bubblewrap' (bwrap) is not installed."
