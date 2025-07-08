@@ -1,5 +1,3 @@
-##EAC IS ENFORCED NOW
-##script logic has changed but its working again - enjoy!
 
 
 ## Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
