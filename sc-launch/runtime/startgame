@@ -1,21 +1,30 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+GAME_DIR="$HOME/Games/star-citizen"
+CUDA_PATCH="$GAME_DIR/libcuda.patched.so"
+
+# Check if bubblewrap is installed
+if ! command -v bwrap &> /dev/null; then
+    echo "'bubblewrap' (bwrap) is not installed."
+    echo "Please install it with your package manager, for example:"
+    echo "  - Debian/Ubuntu: sudo apt install bubblewrap"
+    echo "  - Fedora: sudo dnf install bubblewrap"
+    echo "  - Arch: sudo pacman -S bubblewrap"
+    exit 1
+fi
+
 # Ensure required scripts are executable
-chmod +x "$HOME/Games/star-citizen/fakeroot.sh"
-chmod +x "$HOME/Games/star-citizen/launchoptions.sh"
-chmod +x "$HOME/Games/star-citizen/patchcuda.sh"
-
-
-# Define path to patched CUDA file
-CUDA_PATCH="$HOME/Games/star-citizen/libcuda.patched.so"
+chmod +x "$GAME_DIR/fakeroot.sh" "$GAME_DIR/launchoptions.sh" "$GAME_DIR/patchcuda.sh"
 
 # Run patch only if the file doesn't exist
 if [[ ! -f "$CUDA_PATCH" ]]; then
     echo "Patching libcuda... ($CUDA_PATCH not found)"
-    ./patchcuda.sh  # assuming patchcuda.sh is in the current directory
+    "$GAME_DIR/patchcuda.sh"
 else
     echo "libcuda.patched.so already exists. Skipping patch."
 fi
 
 # Launch the game scripts
-bash "$HOME/Games/star-citizen/fakeroot.sh" "$HOME/Games/star-citizen/launchoptions.sh"
+"$GAME_DIR/fakeroot.sh" "$GAME_DIR/launchoptions.sh"
