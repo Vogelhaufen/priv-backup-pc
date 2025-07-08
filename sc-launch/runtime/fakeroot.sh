@@ -1,31 +1,28 @@
 #!/bin/bash
+set -euo pipefail
 
-set -e
+# === CONFIGURATION ===
+PATCHED_CUDA="$HOME/Games/star-citizen/libcuda.patched.so"
+GAME_EXECUTABLE="${1:-}"
 
-# Game Runner Script with Bubblewrap Sandbox
-
-# Step 1: Argument Check
-if [ $# -lt 1 ]; then
-  echo ""
-  echo "Usage: $0 <game_script_or_binary> [args...]"
-  echo ""
+if [[ -z "$GAME_EXECUTABLE" ]]; then
+  echo "Usage: $0 /path/to/game/binary [args...]"
   exit 1
 fi
 
-# Step 2: Variable Setup
-PATCHED_LIB="$HOME/Games/star-citizen/libcuda.patched.so"
-GAME_EXEC="$(realpath "$1")"
+GAME_EXEC=$(realpath "$GAME_EXECUTABLE")
 shift
-GAMEDIR="$(dirname "$GAME_EXEC")"
-WINEPREFIX="$HOME/Games/star-citizen"
+GAMEDIR=$(dirname "$GAME_EXEC")
+WINEPREFIX="${WINEPREFIX:-$HOME/Games/star-citizen}"
 
-# Dynamic Wayland socket detection
-if [ -n "$WAYLAND_DISPLAY" ] && [ -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY" ]; then
-  WAYLAND_SOCKET="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/$WAYLAND_DISPLAY"
+# === RUNTIME + DISPLAY DETECTION ===
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+WAYLAND_SOCKET=""
+if [[ -n "${WAYLAND_DISPLAY:-}" && -S "$RUNTIME_DIR/$WAYLAND_DISPLAY" ]]; then
+  WAYLAND_SOCKET="$RUNTIME_DIR/$WAYLAND_DISPLAY"
 else
-  # Auto-detect first available wayland socket
-  for sock in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/wayland-*; do
-    if [ -S "$sock" ]; then
+  for sock in "$RUNTIME_DIR"/wayland-*; do
+    if [[ -S "$sock" ]]; then
       WAYLAND_SOCKET="$sock"
       WAYLAND_DISPLAY="$(basename "$sock")"
       break
@@ -33,25 +30,27 @@ else
   done
 fi
 
-echo "Preparing sandbox environment for:"
-echo "  Game executable: $GAME_EXEC"
-echo "  Patched libcuda: $PATCHED_LIB"
-echo "  Wine prefix:     $WINEPREFIX"
-echo "  Wayland socket:  $WAYLAND_SOCKET"
-echo ""
-
-# Step 3: Sanity Checks
-if [ ! -f "$PATCHED_LIB" ]; then
-  echo "Error: Patched CUDA library not found at:"
-  echo "  $PATCHED_LIB"
+# === CUDA REDIRECTION TARGET ===
+if [[ ! -f "$PATCHED_CUDA" ]]; then
+  echo "Error: Patched libcuda.so not found at: $PATCHED_CUDA"
   exit 2
 fi
 
-if [ ! -S "$WAYLAND_SOCKET" ]; then
-  echo "Warning: Wayland socket not found. Falling back to X11 if available..."
-fi
+# === REQUIRED NVIDIA DEVICES ===
+REQUIRED_DEVICES=(
+  /dev/nvidia0
+  /dev/nvidiactl
+  /dev/nvidia-uvm
+  /dev/nvidia-uvm-tools
+  /dev/nvidia-modeset
+  /dev/dri
+  /dev/shm
+)
+for dev in "${REQUIRED_DEVICES[@]}"; do
+  [[ -e "$dev" ]] || { echo "Missing NVIDIA device: $dev"; exit 3; }
+done
 
-# Step 4: Bubblewrap Arguments
+# === BUBBLEWRAP CONFIG ===
 BWRAP_ARGS=(
   --ro-bind / /
   --dev /dev
@@ -59,9 +58,70 @@ BWRAP_ARGS=(
   --tmpfs /tmp
   --ro-bind /sys /sys
 
-  --bind "$PATCHED_LIB" /usr/lib/libcuda.so
-  # NO --bind "$PATCHED_LIB" /usr/lib/libcuda.so.575.64.03
+  # Bind patched CUDA to all detected libcuda.so* files across common dirs
+)
 
+# 32-bit CUDA? Nope. Dead weight for modern gaming.
+# Maybe useless
+cuda_lib_dirs=(
+  # Universal
+  /usr/lib
+  /usr/lib64
+  /lib
+  /lib64
+
+  # Debian/Ubuntu
+  /usr/lib/x86_64-linux-gnu
+  /usr/lib/i386-linux-gnu
+  /usr/lib32
+  /usr/lib32/nvidia
+  /usr/lib/nvidia
+  /usr/lib/nvidia-*
+  /usr/lib/nvidia-cuda-toolkit
+
+  # Fedora/RHEL/CentOS
+  /usr/lib64/nvidia
+  /usr/lib64/nvidia-*
+  /usr/lib64/nvidia/current
+  /usr/lib64/x86_64-linux-gnu
+
+  # Arch
+  /usr/lib/nvidia
+  /usr/lib/nvidia-*
+
+  # OpenSUSE
+  /usr/lib64/nvidia
+  /usr/lib64/nvidia-*
+
+  # CUDA Toolkit
+  /usr/local/cuda/lib64
+  /usr/local/cuda/lib
+  /usr/local/cuda-*/lib64
+  /usr/local/cuda-*/lib
+
+  # Optional vendor install locations
+  /opt/cuda/lib64
+  /opt/nvidia/cuda/lib64
+  /opt/nvidia/cuda-*/lib64
+)
+
+for dir in "${cuda_lib_dirs[@]}"; do
+  [[ -d "$dir" ]] || continue
+  while IFS= read -r -d '' file; do
+    # Exclude obvious backup/junk files
+    case "$file" in
+      *.bak|*.old|*.save|*~) continue ;;
+    esac
+    # Match only valid libcuda.so* filenames
+    if [[ "$(basename "$file")" =~ ^libcuda\.so([.0-9]*)?$ ]]; then
+      echo "Binding patched CUDA over: $file"
+      BWRAP_ARGS+=(--bind "$PATCHED_CUDA" "$file")
+    fi
+  done < <(find "$dir" -maxdepth 1 \( -type f -o -type l \) -name 'libcuda.so*' -print0 2>/dev/null)
+done
+printf "\nBound CUDA libs:\n%s\n" "${BWRAP_ARGS[@]}" | grep libcuda
+
+BWRAP_ARGS+=(
   --bind "$GAMEDIR" "$GAMEDIR"
   --bind "$HOME" "$HOME"
 
@@ -73,26 +133,30 @@ BWRAP_ARGS=(
   --dev-bind /dev/dri /dev/dri
   --dev-bind /dev/shm /dev/shm
 
-  # NO --dev-bind /dev/input to avoid warppointer conflict, wayland socket handles it fine
   --bind /tmp/.X11-unix /tmp/.X11-unix
-  --bind "$WAYLAND_SOCKET" "$WAYLAND_SOCKET"
-  --bind "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/pipewire-0" "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/pipewire-0"
-
-  --setenv LD_LIBRARY_PATH /usr/lib
-  --setenv HOME "$HOME"
-  --setenv PATH "$PATH"
-  --setenv WAYLAND_DISPLAY "$WAYLAND_DISPLAY"
-  --setenv DISPLAY "$DISPLAY"
-  --setenv WINEPREFIX "$WINEPREFIX"
+  --bind "$RUNTIME_DIR/pipewire-0" "$RUNTIME_DIR/pipewire-0"
 )
 
-# Step 5: Run the Game
-echo "Launching the game inside a sandboxed environment..."
-echo "-----------------------------------------------------"
-bwrap "${BWRAP_ARGS[@]}" "$GAME_EXEC" "$@"
+if [[ -n "$WAYLAND_SOCKET" ]]; then
+  BWRAP_ARGS+=(--bind "$WAYLAND_SOCKET" "$WAYLAND_SOCKET")
+fi
 
-# Step 6: Exit Message
+# Minimal safe environment for EAC/BattleEye
+BWRAP_ARGS+=(
+  --setenv HOME "$HOME"
+  --setenv PATH "$PATH"
+  --setenv WINEPREFIX "$WINEPREFIX"
+  --setenv DISPLAY "${DISPLAY:-}"
+  --setenv WAYLAND_DISPLAY "${WAYLAND_DISPLAY:-}"
+  --setenv XDG_RUNTIME_DIR "$RUNTIME_DIR"
+)
+
+# === EXECUTION ===
 echo ""
-echo "Game exited."
-echo "Fakeroot sandbox environment was successfully used and cleaned up."
-echo ""
+echo "Launching Star Citizen inside Bubblewrap..."
+echo "Executable: $GAME_EXEC"
+echo "Patched CUDA: $PATCHED_CUDA"
+echo "Wine Prefix: $WINEPREFIX"
+echo "Wayland Socket: $WAYLAND_SOCKET"
+echo "--------------------------------------------"
+exec bwrap "${BWRAP_ARGS[@]}" "$GAME_EXEC" "$@"
