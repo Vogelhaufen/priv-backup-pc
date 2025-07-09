@@ -314,12 +314,18 @@ case "$1" in
     ;;
 esac
 
-update_check() {
-  while "$wine_path"/winedbg --command "info proc" | grep -qi "rsi.*setup"; do
-    sleep 2
-  done
-}
+
 trap "update_check; \"$wine_path\"/wineserver -k" EXIT
+update_check() {
+  while mount | grep -q "$LIBCUDA_ORIG"; do sudo umount "$LIBCUDA_ORIG"; done
+  while mount | grep -q "$PATCHED_CUDA"; do sudo umount "$PATCHED_CUDA"; done
+
+  "$wine_path"/wineserver -k
+}
+
+trap update_check EXIT
+
+
 
 echo "========== Launching Star Citizen =========="
 # You can pin Cores to SC using taskset

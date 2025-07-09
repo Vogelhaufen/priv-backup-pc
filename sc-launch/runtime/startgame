@@ -13,21 +13,8 @@ if ! lspci | grep -iq nvidia; then
 fi
 echo "✔ NVIDIA GPU detected."
 
-# Check if bubblewrap is installed
-echo "========== Sandbox Check =========="
-if ! command -v bwrap &> /dev/null; then
-    echo "'bubblewrap' (bwrap) is not installed."
-    echo "Please install it with your package manager, for example:"
-    echo "  - Debian/Ubuntu: sudo apt install bubblewrap"
-    echo "  - Fedora: sudo dnf install bubblewrap"
-    echo "  - Arch: sudo pacman -S bubblewrap"
-    exit 1
-fi
-
-echo "===== Sandbox Check finished ======="
-
 # Ensure required scripts are executable
-chmod +x "$GAME_DIR/fakeroot.sh" "$GAME_DIR/launchoptions.sh" "$GAME_DIR/patchcuda.sh"
+chmod +x "$GAME_DIR/mount_libcuda.sh" "$GAME_DIR/launchoptions.sh" "$GAME_DIR/patchcuda.sh"
 
 # Run patch only if the file doesn't exist
 if [[ ! -f "$CUDA_PATCH" ]]; then
@@ -38,4 +25,4 @@ else
 fi
 
 # Launch the game scripts
-"$GAME_DIR/fakeroot.sh" "$GAME_DIR/launchoptions.sh"
+"$GAME_DIR/mount_libcuda.sh" "$GAME_DIR/launchoptions.sh"
