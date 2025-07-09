@@ -63,6 +63,8 @@ For installation and setup guidance, see:
 - Latest 'DXVK' and 'DXVK/NVAPI' is **mandatory** but its applied automatically.
 - Uses **Wine** and related utilities as described in the StarCitizen-LUG wiki
 - Intended for advanced users who are familiar with Wine and Linux gaming setups
+- You most likely will get not support the LUG-Helper community for this script since its very complex and hard to maintain
+- It doesn't damage your LUG-Helper install - everything is untouched if you to remove it
 - This software is provided without any warranty or liability
 
 ---
