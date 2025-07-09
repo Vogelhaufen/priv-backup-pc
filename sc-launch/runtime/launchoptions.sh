@@ -217,7 +217,8 @@ else
   else
     echo "✘ Failed to load ntsync without prompt."
     echo "Please run 'sudo modprobe ntsync' manually and re-run this script."
-    exit 1
+    echo "Requires Kernel 6.14 or newer"
+    echo "Falling back to E/Fsync"
   fi
 fi
 
