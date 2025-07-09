@@ -4,7 +4,7 @@
 
 This script is intended to supplement the original `sc-launch.sh`
 
-## Be warned: the script did work for arch/wayland users but Fedora/Mint doesn't seem to work at the moment. 
+## The script currently works for Arch/Wayland users, but does not appear to function correctly on Fedora or Linux Mint at this time. Troubleshooting or adjustments may be required for those distributions.
 
 For installation and setup guidance, see:  
 📎 [StarCitizen-LUG Quick Start Guide](https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide)
