@@ -25,4 +25,5 @@ else
 fi
 
 # Launch the game scripts
-"$GAME_DIR/mount_libcuda.sh" "$GAME_DIR/launchoptions.sh"
+"$GAME_DIR/mount_libcuda.sh"
+"$GAME_DIR/launchoptions.sh"
