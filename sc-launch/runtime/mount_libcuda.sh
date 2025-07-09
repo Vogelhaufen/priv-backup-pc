@@ -34,8 +34,12 @@ fi
 # Mount Patched libcuda.so
 PATCHED_CUDA=$HOME/Games/star-citizen/libcuda.patched.so
 
-echo $LIBCUDA_ORIG
-echo $PATCHED_CUDA
+#debug
+#echo $LIBCUDA_ORIG
+#echo $PATCHED_CUDA
+
+
+echo "========== Mouting $PATCHED_CUDA to $LIBCUDA_ORIG =========="
 
 while mount | grep -q "$LIBCUDA_ORIG"; do
     sudo umount "$LIBCUDA_ORIG"
