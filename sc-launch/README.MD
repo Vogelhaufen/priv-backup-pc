@@ -31,13 +31,14 @@ For installation and setup guidance, see:
 #   • Streamlined Wine prefix and logging management
 #
 # Installation:
-#   1. Place fetch.sh inside your Star Citizen Wine prefix directory
+#   1. Install the game with lug-helper (wine-edition)
+#   2. Place fetch.sh inside your Star Citizen Wine prefix directory
 #      (typically $HOME/Games/star-citizen)
-#   2. Make the script executable:
+#   3. Make the script executable:
 #        chmod +x fetch.sh
-#   3. Launch the script:
+#   4. Launch the script:
 #        ./fetch.sh
-#   4. Start the game
+#   5. Start the game
 #       ./startgame
 #
 # Important Notes:
