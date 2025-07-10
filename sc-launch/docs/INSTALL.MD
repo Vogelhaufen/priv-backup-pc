@@ -6,56 +6,50 @@ Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** suppo
 
 ## 🛠 Prerequisites
 
-- Star Citizen installed using **lug-helper (wine-edition)**
+- Star Citizen installed with **lug-helper (wine-edition)**
 - A working Star Citizen Wine prefix
 
 ---
 
 ## 📥 Installation Steps
 
-### 1. Locate Your Wine Prefix
+1. **Locate Your Wine Prefix**
 
-The script expects your `WINEPREFIX` to be:
+   By default, the launcher expects your Wine prefix at:
 
 $HOME/Games/star-citizen
 
 
-Place the following files **inside your Wine prefix directory** (usually the path above):
+2. **Place the `fetch.sh` Script**
 
----
+Copy the `fetch.sh` script into your Wine prefix directory.
 
-### 2. Place the `fetch.sh` Script
-
-Copy `fetch.sh` into your Star Citizen Wine prefix directory.
-
----
-
-### 3. Make `fetch.sh` Executable
+3. **Make `fetch.sh` Executable**
 
 ```bash
 chmod +x fetch.sh
 
-4. Run the Script
+    Run the Script
 
 ./fetch.sh
 
-5. Start the Game
+Start the Game
 
-./startgame
+    ./startgame
 
 📄 What fetch.sh Does
 
-The fetch.sh script downloads the latest essential files and patches directly into your Wine prefix. This ensures your Star Citizen installation is optimized for NVIDIA GPUs with DLSS v4.
+The fetch.sh script downloads the latest files and patches directly into your Wine prefix, ensuring optimal NVIDIA GPU and DLSS v4 support.
 
-    Tip: Run fetch.sh inside your Wine prefix directory to update the correct location.
+    Tip: Always run fetch.sh inside your Wine prefix directory to update the correct location.
 
 ⚠️ Important Notes
 
-    Requires a POSIX-compliant shell (e.g., bash or sh). Avoid shells like fish.
+    Requires a POSIX-compliant shell (bash or sh). Avoid shells like fish.
 
-    The script might request sudo access to load kernel modules or mount libraries.
+    The script may request sudo permissions for loading kernel modules or mounting libraries.
 
-    For support and more info:
+    For more info and help:
 
         Mactan Wine Releases
 
@@ -63,16 +57,14 @@ The fetch.sh script downloads the latest essential files and patches directly in
 
 🔧 Optional: Create a Symbolic Link
 
-If your Wine prefix is not located at:
+If your Wine prefix is not located at $HOME/Games/star-citizen, e.g.:
 
-$HOME/Games/star-citizen
+/home/YourUserName/MyAwesomeSCdir
 
-(for example: /home/YourUserName/MyAwesomeSCdir), you can create a symbolic link to make the script work without modifications.
-
-Replace /home/YourUserName/MyAwesomeSCdir with your actual Wine prefix path and run:
+You can create a symbolic link to avoid modifying the script:
 
 ln -s /home/YourUserName/MyAwesomeSCdir $HOME/Games/star-citizen
 
-    This links the expected path $HOME/Games/star-citizen to your real Wine prefix.
+This command links the expected path to your actual Wine prefix.
 
 Happy gaming! 🎮✨
