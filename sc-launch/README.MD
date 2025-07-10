@@ -4,9 +4,6 @@
 
 This script is intended to supplement the original `sc-launch.sh`
 
-For installation and setup guidance, see:  
-📎 [StarCitizen-LUG Quick Start Guide](https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide)
-
 ---
 
 ## 🔧 Overview
@@ -112,5 +109,6 @@ Check <a href="https://github.com/Vogelhaufen/priv-backup-pc/blob/main/sc-launch
 
 For help, troubleshooting, and updates, visit the  
 [StarCitizen-LUG GitHub Repository](https://github.com/starcitizen-lug)
+[StarCitizen-LUG Quick Start Guide](https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide)
 
 Happy flying, citizen!
