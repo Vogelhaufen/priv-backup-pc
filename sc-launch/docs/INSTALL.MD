@@ -16,7 +16,7 @@ Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** suppo
 
 1. **Locate Your Wine Prefix**
 
-   By default, the launcher expects your Wine prefix at:
+   By default, the launcher expects your Wine prefix at, if not create the symlink mentioned at the bottom.
 
    ```
    $HOME/Games/star-citizen
