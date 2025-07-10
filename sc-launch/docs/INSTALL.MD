@@ -9,6 +9,7 @@ Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** suppo
 - Star Citizen installed with **lug-helper (wine-edition)**
 - A working Star Citizen Wine prefix
 - A Wayland environment
+- Optional: a kernel supporting NTSYNC for more performance
 
 ---
 
