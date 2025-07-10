@@ -16,11 +16,12 @@ Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** suppo
 
 1. **Locate Your Wine Prefix**
 
-   By default, the launcher expects your Wine prefix at, if not create the symlink mentioned at the bottom.
+   By default, the launcher expects your Wine prefix at not
 
    ```
    $HOME/Games/star-citizen
    ```
+   When thats not the case create the symlink mentioned at the bottom to make sure the script can work.
 
 2. **Place the `fetch.sh` Script**
 
