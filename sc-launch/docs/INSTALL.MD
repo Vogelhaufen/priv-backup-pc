@@ -1,48 +1,69 @@
-# Installation Instructions
+# 🚀 Star Citizen Linux Launcher — Installation Guide
 
-1. Install the game with lug-helper (wine-edition).
+Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** support — made simple!
 
-2. If you already have a Star Citizen installation, make sure your WINEPREFIX is:
+---
+
+## 🛠 Prerequisites
+
+- Star Citizen installed using **lug-helper (wine-edition)**
+- A working Star Citizen Wine prefix
+
+---
+
+## 📥 Installation Steps
+
+### 1. Verify Wine Prefix Location
+
+The script expects your `WINEPREFIX` here:
 
 $HOME/Games/star-citizen
 
 
-Otherwise, see the instructions below.
+If your prefix is somewhere else (e.g., `/home/YourUserName/MyAwesomeSCdir`), create a symbolic link (see next step).
 
-3. Place `fetch.sh` inside your Star Citizen Wine prefix directory  
-(typically `$HOME/Games/star-citizen`).
+---
 
-4. Make the script executable:
+### 2. Create Symbolic Link (if needed)
+
+Replace `/home/YourUserName/MyAwesomeSCdir` with your actual Wine prefix path and run:
 
 ```bash
+ln -s /home/YourUserName/MyAwesomeSCdir $HOME/Games/star-citizen
+
+    This links the expected path to your real Wine prefix.
+
+3. Place the fetch.sh Script
+
+Copy fetch.sh into your Star Citizen Wine prefix directory (usually $HOME/Games/star-citizen).
+4. Make fetch.sh Executable
+
 chmod +x fetch.sh
 
-    Launch the script:
+5. Run the Script
 
 ./fetch.sh
 
-    Start the game:
+6. Start the Game
 
 ./startgame
 
-IMPORTANT
+📄 What fetch.sh Does
 
-This script always assumes your WINEPREFIX is located at:
+The fetch.sh script downloads the latest essential files and patches directly into your Wine prefix. This ensures your Star Citizen installation is optimized for NVIDIA GPUs with DLSS v4.
 
-$HOME/Games/star-citizen
+    Tip: Run fetch.sh inside your Wine prefix directory (typically $HOME/Games/star-citizen) to update the correct location.
 
-If your actual WINE prefix is somewhere else (for example: /home/YourUserName/MyAwesomeSCdir), you need to create a symbolic link so the script can work correctly.
-Creating the symbolic link
+⚠️ Important Notes
 
-Run this command in your terminal, replacing /home/YourUserName/MyAwesomeSCdir with the actual path to your WINE prefix:
+    Make sure $HOME/Games/star-citizen does NOT already exist as a regular directory before creating the symlink.
 
-ln -s /home/YourUserName/MyAwesomeSCdir $HOME/Games/star-citizen
+    Requires a POSIX-compliant shell (e.g., bash or sh). Avoid shells like fish.
 
-This command creates a symbolic link at $HOME/Games/star-citizen pointing to your real WINE prefix.
-Summary
+    The script might request sudo access to load kernel modules or mount libraries.
 
-    Verify your actual WINEPREFIX location.
+    For support and more info:
 
-    Create the symbolic link as shown above.
+        Mactan Wine Releases
 
-    Run the script as usual.
+        Star Citizen Linux Quick Start Guide
