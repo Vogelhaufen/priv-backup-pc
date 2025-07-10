@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 Star Citizen Linux Launcher — Installation Guide
 
 Run **Star Citizen** on Linux with NVIDIA GPU optimization and **DLSS v4** support — made simple!
@@ -82,3 +83,6 @@ This command links the expected path to your actual Wine prefix.
 ---
 
 *Happy gaming! 🎮✨*
+=======
+
+>>>>>>> e036099390ee211a7a2ae3aa75d0029ad9a75878
