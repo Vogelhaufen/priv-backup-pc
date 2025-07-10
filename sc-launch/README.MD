@@ -4,8 +4,6 @@
 
 This script is intended to supplement the original `sc-launch.sh`
 
-## The script currently works for Arch/Wayland users, but does not appear to function correctly on Fedora or Linux Mint at this time. Troubleshooting or adjustments may be required for those distributions.
-
 For installation and setup guidance, see:  
 📎 [StarCitizen-LUG Quick Start Guide](https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide)
 
@@ -15,45 +13,29 @@ For installation and setup guidance, see:
 
 ```text
 ################################################################################
-# Star Citizen Linux Launcher Script — NVIDIA GPU Optimization with DLSS v4
+# Star Citizen Linux Launcher — NVIDIA GPU Optimization with DLSS v4
 #
 # Purpose:
-#   Harness cutting-edge tech to supercharge Star Citizen on Linux with NVIDIA GPUs,
-#   enabling DLSS v4 and seamless Wine integration.
+#   Use cutting-edge tech to boost Star Citizen on Linux with NVIDIA GPUs,
+#   enabling DLSS v4 and smooth Wine integration.
 #
-#   Reality check: it’s mostly me duct-taping a bunch of scripts and tweaks together
-#   so you don’t have to.
+#   Reality check: mostly duct-taping scripts and tweaks so you don’t have to.
 #
-# Key Features:
-#   • DLSS v4 integration
-#   • Vulkan / Direct3D 11 Support
-#   • Mactan Wine staging - optimized Wine Runner by the awesome community of LUG
-#   • VRAM detection with dynamic limiting for system stability
-#   • Wine patches fixing mouse cursor issues and infinite loading and much more!
-#   • Streamlined Wine prefix and logging management
+# Features:
+#   • DLSS v4 support
+#   • Vulkan & Direct3D 11
+#   • Mactan Wine staging (optimized Wine runner by LUG community)
+#   • VRAM detection with dynamic limits for stability
+#   • Wine patches fixing mouse issues, infinite loading & more
 #
-# Installation:
-#   1. Install the game with lug-helper (wine-edition)
-#   2. Place fetch.sh inside your Star Citizen Wine prefix directory
-#      (typically $HOME/Games/star-citizen)
-#   3. Make the script executable:
-#        chmod +x fetch.sh
-#   4. Launch the script:
-#        ./fetch.sh
-#   5. Start the game
-#       ./startgame
+# Notes:
+#   • Requires POSIX shell (bash/sh), avoid fish
+#   • May request sudo for kernel modules & libcuda mounting
+#   • Implements DLSS v4 via system patches and Wine DLL overrides
 #
-# Important Notes:
-#   • Requires a POSIX-compliant shell (bash, sh). Avoid incompatible shells like fish.
-#   • May request sudo privileges to load kernel modules (ntsync).
-#   • Achieves DLSS v4 functionality by patching system components and deploying
-#     Wine DLL overrides.
-#
-# Additional Resources:
-#   • Mactan Wine releases:
-#     https://github.com/mactan-sc/mactan-sc-wine/releases/
-#   • Star Citizen Linux Quick Start Guide:
-#     https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide
+# Resources:
+#   • Mactan Wine: https://github.com/mactan-sc/mactan-sc-wine/releases/
+#   • SC Linux Guide: https://github.com/starcitizen-lug/knowledge-base/wiki/Quick-Start-Guide
 ################################################################################
 ```
 
