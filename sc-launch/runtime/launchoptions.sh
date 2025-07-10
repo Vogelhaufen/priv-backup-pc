@@ -282,7 +282,8 @@ export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
 export PROTON_DXVK_D3D8="1"
-
+# Enables winewayland driver; required for VULKAN
+export DISPLAY=
 
 # Optional HUDs
 # export DXVK_HUD=fps
