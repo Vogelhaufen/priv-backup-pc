@@ -39,6 +39,10 @@ For installation and setup guidance, see:
 ################################################################################
 ```
 
+## 🔧 How to Install
+
+Check <a href="https://github.com/Vogelhaufen/priv-backup-pc/blob/main/sc-launch/docs/INSTALL.MD" target="_blank">HOW TO INSTALL</a> for further Information.
+
 ---
 
 ## ✅ Notes
