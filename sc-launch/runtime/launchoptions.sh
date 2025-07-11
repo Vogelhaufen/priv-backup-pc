@@ -195,6 +195,10 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
   fi
 done
 
+for file in /usr/lib/nvidia/wine/*.dll; do
+    dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
+    [ "$file" != "$dest" ] && cp -f "$file" "$dest"
+done
 
 
 # Export Wine-related environment variables
