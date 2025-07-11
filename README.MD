@@ -102,7 +102,7 @@ The variables modify a registry value, which is why simply deleting them is not 
 This script is shared for community use. Please credit the original contributors.  
 All trademarks and game content belong to Cloud Imperium Games and their respective owners.
 
-Check <a href="https://github.com/Vogelhaufen/priv-backup-pc/blob/main/sc-launch/LICENSE" target="_blank">COPYING.WTFPL</a> for further Information.
+Check <a href="https://github.com/Vogelhaufen/priv-backup-pc/blob/main/sc-launch/LICENSE" target="_blank">LICENSE</a> for further Information.
 ---
 
 ## 💬 Support
