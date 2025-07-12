@@ -196,8 +196,12 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
 done
 
 for file in /usr/lib/nvidia/wine/*.dll; do
+ if [ -f "$file" ]; then
+    echo "✔ $file already exists, skipping."
+    else
     dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
     [ "$file" != "$dest" ] && cp -f "$file" "$dest"
+    fi
 done
 
 
