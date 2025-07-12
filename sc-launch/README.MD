@@ -1,4 +1,5 @@
-## 🟥❗ INSTALLER IS BROKEN. I know why. Just need time. Check back later 20250710 ❗🟥
+## 🟥❗ INSTALLER IS BROKEN. I know why. Just need time. Check back later, July 10, 2025. ❗🟥
+## 🟥❗ The LUG-Team is currently evaluating a suitable universal solution as of July 12, 2025.❗🟥
 
 ## Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
 
