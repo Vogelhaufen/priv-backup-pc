@@ -181,7 +181,7 @@ fi
 echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -rf rm $PWD/runners/.mactan_wine_version"
 
-# Setup fake DLLs for DLSS (only if not already existing)
+# Setup fake DLLs for DLSS // only if not already existing
 echo "========== Setting up fake DLLs for DLSS =========="
 FAKE_DLLS_DIR="$HOME/Games/star-citizen/drive_c/windows/system32/"
 cd "$FAKE_DLLS_DIR" || { echo "✘ Failed to change directory to $FAKE_DLLS_DIR"; exit 1; }
@@ -194,16 +194,24 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
     echo "⭳ Created fake $dll"
   fi
 done
-
+                                                                                                                    
 for file in /usr/lib/nvidia/wine/*.dll; do
  if [ -f "$file" ]; then
-    echo "✔ $file already exists, skipping."
+    echo "✔ $file in system32 already exists, skipping."
     else
     dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
     [ "$file" != "$dest" ] && cp -f "$file" "$dest"
     fi
 done
 
+for file in /usr/lib/nvidia/wine/*.dll; do
+ if [ -f "$file" ]; then
+    echo "✔ $file in system32 already exists, skipping."
+    else
+    dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
+    [ "$file" != "$dest" ] && cp -f "$file" "$dest"
+    fi
+done
 
 # Export Wine-related environment variables
 echo "========== Configuring Wine Environment =========="
@@ -211,11 +219,11 @@ launch_log="$WINEPREFIX/sc-launch.log"
 export WINEDLLOVERRIDES="d3d10core=n,d3d11=n,d3d8=n,d3d9=n,dxgi=n,nvapi=n,nvapi64=n,nvofapi64=n;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
 export WINEDEBUG=-all
-# force NTSYNC, E/FSYNC fallback
+# Force NTSYNC, E/FSYNC fallback
 export WINEESYNC
 export WINEFSYNC
 
-# disabled prompting for now. looks kinda sus in game starter
+# Disabled prompting // sudo is already gained in startgame script
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
@@ -234,6 +242,7 @@ CONFIG_FILE="$HOME/Games/star-citizen/.graphics_api_choice"
 
 # Check if the user has already made a choice
 # We need that cause Vulkan is crashing on NVIDIA without disabling NV-Cache
+# Building DXVK 2.7 from source + 570 Branch is recommended for Vulkan
 if [[ -f "$CONFIG_FILE" ]]; then
     choice=$(<"$CONFIG_FILE")
     echo "Using saved graphics API choice: $choice"
