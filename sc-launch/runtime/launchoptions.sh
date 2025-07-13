@@ -202,11 +202,13 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
 done
                                                                                                                     
 for file in /usr/lib/nvidia/wine/*.dll; do
- if [ -f "$file" ]; then
-    echo "✔ $file in system32 already exists, skipping."
-    else
     dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
-    [ "$file" != "$dest" ] && ln -s "$file" "$dest"
+
+    if [ -f "$dest" ]; then
+        echo "✔ $dest already exists, skipping."
+    else
+        echo "→ Linking $file → $dest"
+        ln -s "$file" "$dest"
     fi
 done
 
