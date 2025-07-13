@@ -35,7 +35,7 @@ if [ -f "$SC_LAUNCH_SCRIPT" ]; then
     echo "✔ WINEPREFIX loaded: $WINEPREFIX"
   else
     echo "✘ [ERROR] WINEPREFIX not found in $SC_LAUNCH_SCRIPT"
-    echo "Using default WINEPREFIX=$HOMEÄ/Games/star-citizen"
+    echo "Using default WINEPREFIX=$HOME/Games/star-citizen"
     export WINEPREFIX=$HOME/Games/star-citizen
   fi
 else
