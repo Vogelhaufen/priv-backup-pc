@@ -35,7 +35,7 @@ fi
 PATCHED_CUDA=$HOME/Games/star-citizen/libcuda.patched.so
 
 
-echo "======= Mouting $PATCHED_CUDA to $LIBCUDA_ORIG ========"
+echo "======= Mounting $PATCHED_CUDA to $LIBCUDA_ORIG ========"
 
 
 while mount | grep -q "$LIBCUDA_ORIG"; do
