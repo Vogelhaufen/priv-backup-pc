@@ -295,13 +295,23 @@ REG_PATH="HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore"
 VALUE_NAME="FullPath"
 EXPECTED_VALUE="C:\\Windows\\System32"
 
-# Check if the value exists using reg query
-if "$WINE_BIN" reg query "$REG_PATH" /v "$VALUE_NAME" | grep -q "$EXPECTED_VALUE"; then
+# Query the registry and capture output
+REG_QUERY_OUTPUT=$("$WINE_BIN" reg query "$REG_PATH" /v "$VALUE_NAME" 2>/dev/null)
+
+# Extract actual value (assuming Wine outputs: '    FullPath    REG_SZ    C:\Windows\System32')
+CURRENT_VALUE=$(echo "$REG_QUERY_OUTPUT" | grep "$VALUE_NAME" | tr -s ' ' | cut -d ' ' -f4-)
+
+# Debug: show what was found
+echo "Current registry value: '$CURRENT_VALUE'"
+
+if [ "$CURRENT_VALUE" = "$EXPECTED_VALUE" ]; then
     echo "Registry key already set. Skipping."
 else
     echo "Setting registry key..."
     "$WINE_BIN" reg add "$REG_PATH" /v "$VALUE_NAME" /t REG_SZ /d "$EXPECTED_VALUE" /f
 fi
+
+
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
