@@ -293,17 +293,16 @@ export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 WINE_BIN="/home/hans/Games/star-citizen/runners/wine_runner/bin/wine"
 REG_PATH="HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore"
 VALUE_NAME="FullPath"
-EXPECTED_VALUE_SET="C:\\Windows\\System32"       # Zum SETZEN (doppelte Backslashes)
-EXPECTED_VALUE_CHECK="C:\Windows\System32"       # Zum VERGLEICH (einfacher Backslash)
+EXPECTED_VALUE_SET="C:\\Windows\\System32"
+EXPECTED_VALUE_CHECK="C:\Windows\System32"
 
 REG_QUERY_OUTPUT=$("$WINE_BIN" reg query "$REG_PATH" /v "$VALUE_NAME" 2>/dev/null)
 
-# Wert extrahieren und säubern:
 CURRENT_VALUE=$(echo "$REG_QUERY_OUTPUT" \
   | grep "$VALUE_NAME" \
   | tr -s ' ' \
   | cut -d ' ' -f4- \
-  | sed -e 's/^[[:space:]\'\"]*//' -e 's/[[:space:]\'\"]*$//')
+  | sed -e "s/^[[:space:]\'\"]*//" -e "s/[[:space:]\'\"]*$//")
 
 echo "Current registry value: '$CURRENT_VALUE'"
 
