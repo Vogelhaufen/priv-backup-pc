@@ -37,25 +37,33 @@ PATCHED_CUDA=$HOME/Games/star-citizen/libcuda.patched.so
 echo ""
 echo "======= Mouting $PATCHED_CUDA to $LIBCUDA_ORIG ========"
 
-while mount | grep -q "$LIBCUDA_ORIG"; do
-    sudo umount "$LIBCUDA_ORIG"
 
-    read -rp "Still mounted. Try again? (y/n): " answer
-    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
-        echo "Cancelling unmount attempts."
+while mount | grep -q "$LIBCUDA_ORIG"; do
+    if ! sudo umount "$LIBCUDA_ORIG"; then
+        read -rp "Unmount failed. Try again? (y/n): " answer
+        if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+            echo "Cancelling unmount attempts."
+            break
+        fi
+    else
+        # Erfolgreich ausgehängt, also keine Wiederholung nötig
         break
     fi
 done
 
 while mount | grep -q "$PATCHED_CUDA"; do
-    sudo umount "$PATCHED_CUDA"
-
-    read -rp "Still mounted. Try again? (y/n): " answer2
-    if [[ "$answer2" != "y" && "$answer2" != "Y" ]]; then
-        echo "Cancelling unmount attempts."
+    if ! sudo umount "$PATCHED_CUDA"; then
+        read -rp "Unmount failed. Try again? (y/n): " answer
+        if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+            echo "Cancelling unmount attempts."
+            break
+        fi
+    else
+        # Erfolgreich ausgehängt, also keine Wiederholung nötig
         break
     fi
 done
+
 
 
 sudo mount --bind $PATCHED_CUDA $(realpath $LIBCUDA_ORIG)
