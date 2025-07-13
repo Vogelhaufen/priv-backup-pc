@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Find the real 64-bit libcuda.so
-echo "========== Locating 64-bit libcuda.so =========="
+echo "============== Locating 64-bit libcuda.so ============="
 
 LIBCUDA_ORIG=""
 LIB_SEARCH_PATHS=(
@@ -34,20 +34,29 @@ fi
 # Mount Patched libcuda.so
 PATCHED_CUDA=$HOME/Games/star-citizen/libcuda.patched.so
 
-#debug
-#echo $LIBCUDA_ORIG
-#echo $PATCHED_CUDA
-
-
-echo "========== Mouting $PATCHED_CUDA to $LIBCUDA_ORIG =========="
+echo ""
+echo "======= Mouting $PATCHED_CUDA to $LIBCUDA_ORIG ========"
 
 while mount | grep -q "$LIBCUDA_ORIG"; do
     sudo umount "$LIBCUDA_ORIG"
+
+    read -rp "Still mounted. Try again? (y/n): " answer
+    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+        echo "Cancelling unmount attempts."
+        break
+    fi
 done
 
 while mount | grep -q "$PATCHED_CUDA"; do
     sudo umount "$PATCHED_CUDA"
+
+    read -rp "Still mounted. Try again? (y/n): " answer2
+    if [[ "$answer2" != "y" && "$answer2" != "Y" ]]; then
+        echo "Cancelling unmount attempts."
+        break
+    fi
 done
+
 
 sudo mount --bind $PATCHED_CUDA $(realpath $LIBCUDA_ORIG)
 sleep 1

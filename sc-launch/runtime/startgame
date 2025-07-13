@@ -16,14 +16,11 @@ echo "✔ NVIDIA GPU detected."
 # Ensure required scripts are executable
 chmod +x "$GAME_DIR/mount_libcuda.sh" "$GAME_DIR/launchoptions.sh" "$GAME_DIR/patchcuda.sh"
 
-# Run patch only if the file doesn't exist
-if [[ ! -f "$CUDA_PATCH" ]]; then
-    echo "Patching libcuda... ($CUDA_PATCH not found)"
-    "$GAME_DIR/patchcuda.sh"
-else
-    echo "libcuda.patched.so already exists. Skipping patch."
-fi
+# Check if libcuda.so is patched or changed else skip
+"$GAME_DIR/patchcuda.sh"
+
+# Mount patched libcuda since LD_PRELOAD and LD_LIBRARY_PATH is now blocked by EAC as injection method
+"$GAME_DIR/mount_libcuda.sh"
 
 # Launch the game scripts
-"$GAME_DIR/mount_libcuda.sh"
 "$GAME_DIR/launchoptions.sh"

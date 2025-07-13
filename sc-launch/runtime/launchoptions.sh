@@ -6,14 +6,15 @@
 SC_LAUNCH_SCRIPT="sc-launch.sh"
 ENVEXPORT_FILE="$PWD/ENVEXPORT"
 
-echo "========== GPU Detection =========="
+echo "=================== GPU Detection ==================="
 if ! lspci | grep -iq nvidia; then
   echo "✘ No NVIDIA graphics card found. Exiting."
   exit 1
 fi
 echo "✔ NVIDIA GPU detected."
 
-echo "========== VRAM Limiting =========="
+echo ""
+echo "=================== VRAM Limiting ==================="
 VRAM_LIMIT_MB=0
 if command -v nvidia-smi > /dev/null; then
   VRAM_TOTAL=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n 1)
@@ -25,7 +26,8 @@ else
 fi
 export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_LIMIT_MB;cachedDynamicResources = a;"
 
-echo "========== Loading Wine Prefix =========="
+echo ""
+echo "================ Loading Wine Prefix =================="
 if [ -f "$SC_LAUNCH_SCRIPT" ]; then
   grep "export WINEPREFIX" "$SC_LAUNCH_SCRIPT" > "$ENVEXPORT_FILE"
   if grep -q "WINEPREFIX" "$ENVEXPORT_FILE"; then
@@ -33,13 +35,14 @@ if [ -f "$SC_LAUNCH_SCRIPT" ]; then
     echo "✔ WINEPREFIX loaded: $WINEPREFIX"
   else
     echo "✘ [ERROR] WINEPREFIX not found in $SC_LAUNCH_SCRIPT"
-    exit 1
+    echo "Using default WINEPREFIX=$HOMEÄ/Games/star-citizen"
+    export WINEPREFIX=$HOME/Games/star-citizen
   fi
 else
   echo "✘ [ERROR] $SC_LAUNCH_SCRIPT not found in $PWD"
   exit 1
 fi
-
+echo ""
 echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
 # Hardcoded VERSION for downgrades
 DXVK_VERSION="2.7" 
@@ -107,7 +110,8 @@ else
   printf "DXVK=%s\nNVAPI=%s\n" "$DXVK_VERSION" "$DXVK_NVAPI_VERSION" > "$VERSION_FILE"
 fi
 
-echo "========== Mactan Wine Runner Setup =========="
+echo ""
+echo "============= Mactan Wine Runner Setup ==============="
 
 declare -A WINE_VERSIONS=(
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
@@ -182,7 +186,9 @@ echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -rf rm $PWD/runners/.mactan_wine_version"
 
 # Setup fake DLLs for DLSS // only if not already existing
-echo "========== Setting up fake DLLs for DLSS =========="
+echo ""
+echo "============ Setting up fake DLLs for DLSS ============"
+
 FAKE_DLLS_DIR="$HOME/Games/star-citizen/drive_c/windows/system32/"
 cd "$FAKE_DLLS_DIR" || { echo "✘ Failed to change directory to $FAKE_DLLS_DIR"; exit 1; }
 
@@ -190,7 +196,7 @@ for dll in cryptbase.dll devobject.dll drvstore.dll; do
   if [ -f "$dll" ]; then
     echo "✔ $dll already exists, skipping."
   else
-    cp xaudio2_2.dll "$dll"
+    ln -s security.dll "$dll"
     echo "⭳ Created fake $dll"
   fi
 done
@@ -200,20 +206,13 @@ for file in /usr/lib/nvidia/wine/*.dll; do
     echo "✔ $file in system32 already exists, skipping."
     else
     dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
-    [ "$file" != "$dest" ] && cp -f "$file" "$dest"
+    [ "$file" != "$dest" ] && ln -s "$file" "$dest"
     fi
 done
 
-for file in /usr/lib/nvidia/wine/*.dll; do
- if [ -f "$file" ]; then
-    echo "✔ $file in system32 already exists, skipping."
-    else
-    dest="$HOME/Games/star-citizen/drive_c/windows/system32/$(basename "$file")"
-    [ "$file" != "$dest" ] && cp -f "$file" "$dest"
-    fi
-done
 
 # Export Wine-related environment variables
+echo ""
 echo "========== Configuring Wine Environment =========="
 launch_log="$WINEPREFIX/sc-launch.log"
 export WINEDLLOVERRIDES="d3d10core=n,d3d11=n,d3d8=n,d3d9=n,dxgi=n,nvapi=n,nvapi64=n,nvofapi64=n;winemenubuilder="
@@ -224,6 +223,7 @@ export WINEESYNC
 export WINEFSYNC
 
 # Disabled prompting // sudo is already gained in startgame script
+echo ""
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
@@ -309,7 +309,8 @@ export DISPLAY=
 export wine_path="$WINEPREFIX/runners/wine_runner/bin/"
 export WINE_PATH="$wine_path"
 
-echo "========== Paths used =========="
+echo ""
+echo "==================== Paths used ======================"
 echo "WINEPREFIX dir: $WINEPREFIX"
 echo "Wine runner bin dir: $wine_path"
 
@@ -340,8 +341,8 @@ update_check() {
 trap update_check EXIT
 
 
-
-echo "========== Launching Star Citizen =========="
+echo ""
+echo "=============== Launching Star Citizen ==============="
 # You can pin Cores to SC using taskset
 # e.g. /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
 # Check your CPU specs
