@@ -288,7 +288,7 @@ export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,
 # Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 # NVIDIA related
-"$WINEPREFIX/runners/wine_runner/bin/wine reg add "HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore" /v "FullPath" /t REG_SZ /d "C:\\Windows\\System32" /f"
+"$WINEPREFIX/runners/wine_runner/bin/wine reg add "HKLM\\Software\\NVIDIA\ Corporation\\Global\\NGXCore" /v "FullPath" /t REG_SZ /d "C:\\Windows\\System32" /f"
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
