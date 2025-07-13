@@ -300,7 +300,9 @@ else
 fi
 
 # END REG Key to enable NGX
-sleep 4
+
+# Wait for previous wine instance to die
+sleep 3
 # Proton / umu; no alien startscripts; not in use rn
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
