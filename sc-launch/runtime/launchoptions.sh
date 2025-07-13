@@ -288,8 +288,24 @@ export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,
 # Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 # NVIDIA related
+#WINE_BIN="/home/hans/Games/star-citizen/runners/wine_runner/bin/wine"
+#"$WINE_BIN" reg add "HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore" /v "FullPath" /t REG_SZ /d "C:\\Windows\\System32" /f
 WINE_BIN="/home/hans/Games/star-citizen/runners/wine_runner/bin/wine"
-"$WINE_BIN" reg add "HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore" /v "FullPath" /t REG_SZ /d "C:\\Windows\\System32" /f
+REG_PATH="HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore"
+VALUE_NAME="FullPath"
+EXPECTED_VALUE="C:\\Windows\\System32"
+
+# Check if the value already exists and matches what we want
+CURRENT_VALUE=$("$WINE_BIN" reg query "$REG_PATH" /v "$VALUE_NAME" 2>/dev/null | grep "$VALUE_NAME" | awk '{print $NF}')
+
+# Add the value only if it's missing or different
+if [ "$CURRENT_VALUE" != "$EXPECTED_VALUE" ]; then
+    echo "Adding or updating registry key..."
+    "$WINE_BIN" reg add "$REG_PATH" /v "$VALUE_NAME" /t REG_SZ /d "$EXPECTED_VALUE" /f
+else
+    echo "Registry key already set. Skipping."
+fi
+
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
