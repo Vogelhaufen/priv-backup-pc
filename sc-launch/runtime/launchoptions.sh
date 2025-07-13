@@ -275,6 +275,7 @@ case "$choice" in
 esac
 
 # REG Key to enable NGX
+echo "============= Setting Registry Keys =============="
 WINE_BIN="/home/hans/Games/star-citizen/runners/wine_runner/bin/wine"
 REG_PATH="HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore"
 VALUE_NAME="FullPath"
