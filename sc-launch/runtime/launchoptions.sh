@@ -215,7 +215,7 @@ done
 
 echo "========== Configuring Wine Environment =========="
 launch_log="$WINEPREFIX/sc-launch.log"
-export WINEDLLOVERRIDES="d3d10core=n,d3d11=n,d3d8=n,d3d9=n,dxgi=n,nvapi=n,nvapi64=n,nvofapi64=n;winemenubuilder="
+export WINEDLLOVERRIDES="dxgi,d3d8,d3d9,d3d10core,d3d11,nvapi,nvapi64,nvofapi64=n,b;winemenubuilder="
 export WINE_LARGE_ADDRESS_AWARE="1"
 export WINEDEBUG=-all
 # Force NTSYNC, E/FSYNC fallback
@@ -288,6 +288,7 @@ export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,
 # Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 # NVIDIA related
+"$WINEPREFIX/runners/wine_runner/bin/wine reg add "HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore" /v "FullPath" /t REG_SZ /d "C:\\Windows\\System32" /f"
 export __GL_SHADER_DISK_CACHE_SIZE=10737418240
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
