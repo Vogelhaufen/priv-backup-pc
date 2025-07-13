@@ -46,7 +46,7 @@ while mount | grep -q "$LIBCUDA_ORIG"; do
             break
         fi
     else
-        # Erfolgreich ausgehängt, also keine Wiederholung nötig
+        # !
         break
     fi
 done
@@ -59,7 +59,7 @@ while mount | grep -q "$PATCHED_CUDA"; do
             break
         fi
     else
-        # Erfolgreich ausgehängt, also keine Wiederholung nötig
+        #! 
         break
     fi
 done
