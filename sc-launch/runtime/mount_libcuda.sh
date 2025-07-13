@@ -34,7 +34,7 @@ fi
 # Mount Patched libcuda.so
 PATCHED_CUDA=$HOME/Games/star-citizen/libcuda.patched.so
 
-echo ""
+
 echo "======= Mouting $PATCHED_CUDA to $LIBCUDA_ORIG ========"
 
 
