@@ -298,7 +298,7 @@ else
     "$WINE_BIN" reg add "$REG_PATH" /v "$VALUE_NAME" /t REG_SZ /d "$EXPECTED_VALUE_SET" /f
 fi
 # END REG Key to enable NGX
-sleep 1
+sleep 4
 # Proton / umu; no alien startscripts; not in use rn
 export GAMEID=umu-starcitizen-noPreset-noProton
 export STORE=none
