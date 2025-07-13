@@ -317,9 +317,9 @@ export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,
 # Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
 export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
 # NVIDIA related
-export __GL_SHADER_DISK_CACHE_SIZE=10737418240
+export __GL_SHADER_DISK_CACHE_SIZE="10737418240"
 export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
-export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
+export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP="1"
 export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
 export MESA_SHADER_CACHE_MAX_SIZE="10G"
 # Even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
@@ -327,13 +327,15 @@ export DXVK_HDR="1"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
-export PROTON_DXVK_D3D8="1"
 # Enables winewayland driver; required for VULKAN
 export DISPLAY=
 
 # Optional HUDs
 # export DXVK_HUD=fps
 # export MANGOHUD=1
+
+# Option vulkan
+# $WINEPREFIX winetricks vkd3d
 
 export wine_path="$WINEPREFIX/runners/wine_runner/bin/"
 export WINE_PATH="$wine_path"
