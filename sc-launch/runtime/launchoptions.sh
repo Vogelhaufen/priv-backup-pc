@@ -298,6 +298,7 @@ else
     echo "Setting registry key..."
     "$WINE_BIN" reg add "$REG_PATH" /v "$VALUE_NAME" /t REG_SZ /d "$EXPECTED_VALUE_SET" /f
 fi
+
 # END REG Key to enable NGX
 sleep 4
 # Proton / umu; no alien startscripts; not in use rn
