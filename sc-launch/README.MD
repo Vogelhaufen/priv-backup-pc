@@ -1,5 +1,5 @@
-## 🟥❗ INSTALLER IS BROKEN. I know why. Just need time. Check back later, July 10, 2025. ❗🟥
-## 🟥❗ The LUG-Team is currently evaluating a suitable universal solution as of July 12, 2025.❗🟥
+## 🟥❗ This project has been deprecated due to changes by the LUG team, who are now implementing all the necessary steps to enable DLSS support in their Wine builds.❗🟥
+
 
 ## Star Citizen Linux Launcher Script (Optimized for NVIDIA GPUs)
 
