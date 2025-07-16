@@ -250,7 +250,7 @@ else
 fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
-echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners/.mactan_wine_version"
+echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners"
 
 
 # Disabled prompting // sudo is already gained in startgame script
