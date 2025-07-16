@@ -38,10 +38,7 @@ if [ -f "$SC_LAUNCH_SCRIPT" ]; then
     echo "Using default WINEPREFIX=$HOME/Games/star-citizen"
     export WINEPREFIX=$HOME/Games/star-citizen
   fi
-else
-  echo "✘ [ERROR] $SC_LAUNCH_SCRIPT not found in $PWD"
-  exit 1
-fi
+
 
 echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
 # Hardcoded VERSION for downgrades
