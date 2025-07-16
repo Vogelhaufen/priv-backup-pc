@@ -235,13 +235,20 @@ else
       tar --use-compress-program=unzstd -xf "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
     fi
   else
-    echo "Unsupported archive format: .$EXT"
+    echo "❌ Unsupported archive format: .$EXT"
     exit 1
   fi
 fi
 
+# Verify extracted runner files exist
+if [ ! -x "$EXTRACT_DIR/bin/wine" ] || [ ! -x "$EXTRACT_DIR/bin/wineserver" ]; then
+  echo "❌ Extracted runner binaries not found in $EXTRACT_DIR/bin/. Extraction might have failed or archive structure is unexpected."
+  exit 1
+fi
+
 echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -f $CONFIG_FILE"
+
 
 # Export Wine-related environment variables
 
