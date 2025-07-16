@@ -340,7 +340,7 @@ export DISPLAY=
 #export LSFG_PERF_MODE
 #export LSFG_FLOW_SCALE=0.75
 #export LSFG_HDR=1
-#VK_LOADER_DEBUG=all
+#export VK_LOADER_DEBUG=all
 #export DXVK_FRAME_RATE=60
 #export VKD3D_FRAME_RATE=60
 
