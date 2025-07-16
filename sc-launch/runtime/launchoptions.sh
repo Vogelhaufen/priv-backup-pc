@@ -378,7 +378,7 @@ export DISPLAY=
 # Option vulkan
 # $WINEPREFIX winetricks vkd3d
 
-export wine_path="$WINEPREFIX/runners/wine_runner/bin/"
+export wine_path="$WINEPREFIX/runners/wine_runner/bin"
 export WINE_PATH="$wine_path"
 
 
