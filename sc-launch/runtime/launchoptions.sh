@@ -110,6 +110,8 @@ fi
 
 echo "============= Mactan Wine Runner Setup ==============="
 
+echo "============= Mactan Wine Runner Setup ==============="
+
 declare -A WINE_VERSIONS=(
   ["10.12-git"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
@@ -163,7 +165,8 @@ else
 fi
 
 ARCHIVE_URL="${WINE_VERSIONS[$VERSION]}"
-ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.gz"
+EXT="${ARCHIVE_URL##*.}"
+ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.$EXT"
 
 if [ -d "$EXTRACT_DIR" ]; then
   echo "✔ Mactan runner already extracted, using existing files."
@@ -177,7 +180,14 @@ else
 
   echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (stripping top-level directory)..."
   mkdir -p "$EXTRACT_DIR"
-  tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+  if [[ "$EXT" == "gz" ]]; then
+    tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+  elif [[ "$EXT" == "zst" ]]; then
+    tar --use-compress-program=unzstd -xf "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+  else
+    echo "Unsupported archive format: .$EXT"
+    exit 1
+  fi
 fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
