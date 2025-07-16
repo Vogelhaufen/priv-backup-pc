@@ -11,8 +11,25 @@
   git sparse-checkout set sc-launch/runtime || exit 1
   git checkout || exit 1
 
-  mv sc-launch/runtime/* "$start_dir"/ || exit 1
-  mv sc-launch/runtime/.* "$start_dir"/ 2>/dev/null || true
+  echo "Checking for existing files in $start_dir that may be overwritten..."
+  overwrite_all=false
+  for file in sc-launch/runtime/* sc-launch/runtime/.*; do
+    [ -e "$file" ] || continue
+    basefile=$(basename "$file")
+    target="$start_dir/$basefile"
+
+    if [ -e "$target" ]; then
+      if [ "$overwrite_all" = false ]; then
+        read -p "File '$target' exists. Overwrite? [y/N/a=overwrite all] " answer
+        case "$answer" in
+          [yY]) ;;
+          [aA]) overwrite_all=true ;;
+          *) continue ;;
+        esac
+      fi
+    fi
+
+    cp -f "$file" "$target"
+  done
 
   chmod +x "$start_dir/startgame"
-)
