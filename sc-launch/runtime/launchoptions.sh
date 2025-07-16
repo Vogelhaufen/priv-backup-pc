@@ -137,6 +137,46 @@ done
 
 echo "============= Mactan Wine Runner Setup ==============="
 
+extract_silent() {
+  local archive_file="$1"
+  local target_dir="$2"
+  [ -z "$archive_file" ] && return 1
+
+  mkdir -p "$target_dir" || return 1
+  local tmp_dir
+  tmp_dir=$(mktemp -d) || return 1
+
+  case "$archive_file" in
+    *.tar.gz|*.tgz)
+      tar -xzf "$archive_file" -C "$tmp_dir" >/dev/null 2>&1 || return 1
+      ;;
+    *.tar.zst)
+      tar --use-compress-program=unzstd -xf "$archive_file" -C "$tmp_dir" >/dev/null 2>&1 || return 1
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  case "$archive_file" in
+    *.tar.gz|*.tgz)
+      # Simulate --strip-components=1
+      shopt -s dotglob nullglob
+      first_dir=("$tmp_dir"/*)
+      if [ -d "${first_dir[0]}" ]; then
+        mv "${first_dir[0]}"/* "$target_dir" 2>/dev/null
+      else
+        mv "$tmp_dir"/* "$target_dir"
+      fi
+      ;;
+    *)
+      mv "$tmp_dir"/* "$target_dir"
+      ;;
+  esac
+
+  rm -rf "$tmp_dir"
+}
+
 declare -A WINE_VERSIONS=(
 
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
@@ -146,7 +186,6 @@ declare -A WINE_VERSIONS=(
   ["10.3-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz"
 
 )
-
 
 BASE_DIR="$WINEPREFIX/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
@@ -191,9 +230,8 @@ else
 fi
 
 ARCHIVE_URL="${WINE_VERSIONS[$VERSION]}"
-ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.gz"
-
-
+ARCHIVE_NAME=$(basename "$ARCHIVE_URL")
+ARCHIVE_PATH="$BASE_DIR/$ARCHIVE_NAME"
 
 if [ -d "$EXTRACT_DIR" ]; then
   echo "✔ Mactan runner already extracted, using existing files."
@@ -205,26 +243,13 @@ else
     echo "✔ Archive for $VERSION already downloaded."
   fi
 
-  echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (stripping top-level directory)..."
-  mkdir -p "$EXTRACT_DIR"
-  tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
-
+  echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (conditional strip)..."
+  extract_silent "$ARCHIVE_PATH" "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
 fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
-echo "To switch from $VERSION to another wine-runner: rm -rf rm $WINEPREFIX/runners/.mactan_wine_version"
+echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners/.mactan_wine_version"
 
-
-# Export Wine-related environment variables
-
-echo "========== Configuring Wine Environment =========="
-launch_log="$WINEPREFIX/sc-launch.log"
-export WINEDLLOVERRIDES="dxgi,d3d8,d3d9,d3d10core,d3d11,nvapi,nvapi64,nvofapi64=n,b;winemenubuilder="
-export WINE_LARGE_ADDRESS_AWARE="1"
-export WINEDEBUG=-all
-# Force NTSYNC, E/FSYNC fallback
-export WINEESYNC
-export WINEFSYNC
 
 # Disabled prompting // sudo is already gained in startgame script
 
