@@ -155,18 +155,18 @@ mkdir -p "$BASE_DIR"
 
 NEED_VERSION_SELECTION=false
 
-# Falls CONFIG_FILE fehlt oder ungültig ist, Version neu wählen
-if [ ! -f "$CONFIG_FILE" ]; then
-  NEED_VERSION_SELECTION=true
-else
+# Check if config file exists and contains a valid version, else prompt for version selection
+if [ -f "$CONFIG_FILE" ]; then
   VERSION=$(cat "$CONFIG_FILE")
   if [[ ! ${WINE_VERSIONS[$VERSION]+_} ]]; then
     echo "Saved version '$VERSION' not found in available versions."
     NEED_VERSION_SELECTION=true
   fi
+else
+  NEED_VERSION_SELECTION=true
 fi
 
-# Falls wine_runner nicht existiert oder leer ist → ebenfalls Version neu wählen
+# Check if extraction directory exists and is not empty, else prompt for version selection
 if [ ! -d "$EXTRACT_DIR" ] || [ -z "$(ls -A "$EXTRACT_DIR" 2>/dev/null)" ]; then
   NEED_VERSION_SELECTION=true
 fi
@@ -181,6 +181,7 @@ if [ "$NEED_VERSION_SELECTION" = true ]; then
   done
   echo "Press Enter to select default version: $DEFAULT_VERSION"
 
+  # Prompt user to select version or use default
   while true; do
     read -rp "Enter choice number (or press Enter for default): " choice
     if [[ -z "$choice" ]]; then
@@ -205,7 +206,7 @@ ARCHIVE_URL="${WINE_VERSIONS[$VERSION]}"
 EXT="${ARCHIVE_URL##*.}"
 ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.$EXT"
 
-# Prüfen, ob EXTRACT_DIR existiert UND nicht leer ist
+# Check if extraction directory exists and contains files; if not, download and extract
 if [ -d "$EXTRACT_DIR" ] && [ "$(ls -A "$EXTRACT_DIR" 2>/dev/null)" ]; then
   echo "✔ Mactan runner already extracted, using existing files."
 else
@@ -216,21 +217,32 @@ else
     echo "✔ Archive for $VERSION already downloaded."
   fi
 
-  echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (stripping top-level directory)..."
+  echo "🧼 Extracting Mactan runner $VERSION to $EXTRACT_DIR..."
+
   mkdir -p "$EXTRACT_DIR"
 
+  # For version 10.12-git-DLSS, extract without stripping top-level directory
   if [[ "$EXT" == "gz" ]]; then
-    tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    if [[ "$VERSION" == "10.12-git-DLSS" ]]; then
+      tar xfz "$ARCHIVE_PATH" -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    else
+      tar xfz "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    fi
   elif [[ "$EXT" == "zst" ]]; then
-    tar --use-compress-program=unzstd -xf "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    if [[ "$VERSION" == "10.12-git-DLSS" ]]; then
+      tar --use-compress-program=unzstd -xf "$ARCHIVE_PATH" -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    else
+      tar --use-compress-program=unzstd -xf "$ARCHIVE_PATH" --strip-components=1 -C "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
+    fi
   else
-    echo "❌ Unsupported archive format: .$EXT"
+    echo "Unsupported archive format: .$EXT"
     exit 1
   fi
 fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -f $CONFIG_FILE"
+
 # Export Wine-related environment variables
 
 echo "========== Configuring Wine Environment =========="
