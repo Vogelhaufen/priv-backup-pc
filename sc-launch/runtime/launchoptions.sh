@@ -149,7 +149,7 @@ declare -A WINE_VERSIONS=(
 
 
 
-BASE_DIR="$PWD/runners"
+BASE_DIR="/home/$USER/Games/star-citizen/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
 DEFAULT_VERSION="10.10-git"
