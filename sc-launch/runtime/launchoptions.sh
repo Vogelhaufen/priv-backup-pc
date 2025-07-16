@@ -144,7 +144,7 @@ declare -A WINE_VERSIONS=(
   ["10.3-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz"
 )
 
-BASE_DIR="$PWD/runners"
+BASE_DIR="/home/$USER/Games/starcitizen/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
 DEFAULT_VERSION="10.12-git-DLSS"
