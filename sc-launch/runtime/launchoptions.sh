@@ -333,6 +333,18 @@ export DXVK_ENABLE_NVAPI="1"
 # Enables winewayland driver; required for VULKAN
 export DISPLAY=
 
+# LSFG settings
+# Does not work with winelaydriver and VULKAN 
+#export ENABLE_LSFG=1
+#export LSFG_MULTIPLIER=4
+#export LSFG_PERF_MODE
+#export LSFG_FLOW_SCALE=0.75
+#export LSFG_HDR=1
+#VK_LOADER_DEBUG=all
+#export DXVK_FRAME_RATE=60
+#export VKD3D_FRAME_RATE=60
+
+
 # Optional HUDs
 # export DXVK_HUD=fps
 # export MANGOHUD=1
