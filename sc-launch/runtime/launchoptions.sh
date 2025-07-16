@@ -114,6 +114,7 @@ fi
 echo "============= Mactan Wine Runner Setup ==============="
 
 declare -A WINE_VERSIONS=(
+  ["10.12-git"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
   ["10.8-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.8-git/wine-tkg-staging-ntsync-git-10.8.tar.gz"
   ["10.7-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.7-git/wine-tkg-staging-ntsync-git-10.7.r0.gedfe4935-327-x86_64.tar.gz"
@@ -124,7 +125,7 @@ declare -A WINE_VERSIONS=(
 BASE_DIR="$PWD/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
-DEFAULT_VERSION="10.10-git"
+DEFAULT_VERSION="10.12-git"
 
 mkdir -p "$BASE_DIR"
 
