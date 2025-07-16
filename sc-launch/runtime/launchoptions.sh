@@ -417,7 +417,7 @@ trap update_check EXIT
 
 
 echo "=============== Launching Star Citizen ==============="
-export LAUNCH_LOG=sc_lauch.log
+export LAUNCH_LOG=sc_launch.log
 # You can pin Cores to SC using taskset
 # e.g. /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
 # Check your CPU specs
