@@ -135,17 +135,17 @@ for file in /usr/lib/nvidia/wine/*.dll; do
     fi
 done
 
-echo "============= Mactan Wine Runner Setup ==============="
+
 declare -A WINE_VERSIONS=(
-  ["10.12-git-DLSS"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
   ["10.8-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.8-git/wine-tkg-staging-ntsync-git-10.8.tar.gz"
   ["10.7-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.7-git/wine-tkg-staging-ntsync-git-10.7.r0.gedfe4935-327-x86_64.tar.gz"
   ["10.6-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.6-git/wine-tkg-staging-ntsync-git-10.6.r0.g81425de3-327-x86_64.tar.gz"
   ["10.3-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.3-git/wine-tkg-staging-ntsync-git-10.3.r4.gfa0cd8ea-327-x86_64.tar.gz"
+  ["10.12-git-DLSS"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
 )
 
-BASE_DIR="/home/$USER/Games/star-citizen/runners"
+BASE_DIR="$PWD/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
 DEFAULT_VERSION="10.12-git-DLSS"
@@ -189,16 +189,21 @@ else
 fi
 
 ARCHIVE_URL="${WINE_VERSIONS[$VERSION]}"
-ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.gz"
+
+if [[ "$ARCHIVE_URL" == *.zst ]]; then
+  ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.zst"
+else
+  ARCHIVE_PATH="$BASE_DIR/$VERSION.tar.gz"
+fi
 
 if [ -d "$EXTRACT_DIR" ]; then
   echo "✔ Mactan runner already extracted, using existing files."
 else
   if [ ! -f "$ARCHIVE_PATH" ]; then
-    echo "⭳ Downloading Mactan runner $VERSION..."
+    echo "⭳ Downloading Mactan runner $VERSION to $ARCHIVE_PATH..."
     wget -O "$ARCHIVE_PATH" "$ARCHIVE_URL" || { echo "Download failed! Exiting."; exit 1; }
   else
-    echo "✔ Archive for $VERSION already downloaded."
+    echo "✔ Archive for $VERSION already downloaded at $ARCHIVE_PATH."
   fi
 
   echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR..."
@@ -216,8 +221,6 @@ fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -rf $PWD/runners/.mactan_wine_version"
-
-
 
 # Export Wine-related environment variables
 
