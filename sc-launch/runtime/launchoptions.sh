@@ -135,6 +135,7 @@ for file in /usr/lib/nvidia/wine/*.dll; do
     fi
 done
 
+echo "============= Mactan Wine Runner Setup ==============="
 declare -A WINE_VERSIONS=(
   ["10.12-git-DLSS"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
