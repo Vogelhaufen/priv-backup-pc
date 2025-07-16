@@ -1,35 +1,53 @@
 #!/usr/bin/env bash
+
 (
+  set -euo pipefail
+
   start_dir="$HOME/Games/star-citizen"
-  tmpdir=$(mktemp -d) || { echo "Failed to create temp dir"; exit 1; }
+  tmpdir=$(mktemp -d)
   cleanup() { rm -rf "$tmpdir"; }
   trap cleanup EXIT
 
-  git clone --no-checkout https://github.com/Vogelhaufen/priv-backup-pc.git "$tmpdir" || exit 1
+  git clone --no-checkout https://github.com/Vogelhaufen/priv-backup-pc.git "$tmpdir"
   cd "$tmpdir" || exit 1
-  git sparse-checkout init || exit 1
-  git sparse-checkout set sc-launch/runtime || exit 1
-  git checkout || exit 1
 
-  echo "Checking for existing files in $start_dir that may be overwritten..."
+  git sparse-checkout init
+  git sparse-checkout set sc-launch/runtime
+  git checkout
+
+  src_dir="sc-launch/runtime"
+  mkdir -p "$start_dir"
+
+  shopt -s dotglob nullglob
+
   overwrite_all=false
-  for file in sc-launch/runtime/* sc-launch/runtime/.*; do
+
+  for file in "$src_dir"/* "$src_dir"/.[!.]* "$src_dir"/..?*; do
     [ -e "$file" ] || continue
+
     basefile=$(basename "$file")
     target="$start_dir/$basefile"
 
-    if [ -e "$target" ]; then
-      if [ "$overwrite_all" = false ]; then
-        read -p "File '$target' exists. Overwrite? [y/N/a=overwrite all] " answer
-        case "$answer" in
-          [yY]) ;;
-          [aA]) overwrite_all=true ;;
-          *) continue ;;
-        esac
-      fi
+    if [ -e "$target" ] && [ "$overwrite_all" = false ]; then
+      read -rp "File or directory '$target' exists. Overwrite? [y/N/a=all] " answer
+      case "$answer" in
+        [yY]) ;;
+        [aA]) overwrite_all=true ;;
+        *) echo "Skipping $target"; continue ;;
+      esac
     fi
 
-    cp -f "$file" "$target"
+    if [ -d "$file" ]; then
+      mkdir -p "$target"
+      cp -a "$file"/. "$target"/
+    else
+      cp -a "$file" "$target"
+    fi
   done
 
-  chmod +x "$start_dir/startgame"
+  if [ -f "$start_dir/startgame" ]; then
+    chmod +x "$start_dir/startgame"
+  fi
+
+  echo "Copy finished successfully."
+)
