@@ -148,8 +148,7 @@ declare -A WINE_VERSIONS=(
 )
 
 
-
-BASE_DIR="/home/$USER/Games/star-citizen/runners"
+BASE_DIR="$WINEPREFIX/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
 DEFAULT_VERSION="10.10-git"
@@ -213,8 +212,7 @@ else
 fi
 
 echo "Setup complete for Mactan Wine Runner version $VERSION."
-echo "To switch from $VERSION to another wine-runner: rm -rf rm $PWD/runners/.mactan_wine_version"
-
+echo "To switch from $VERSION to another wine-runner: rm -rf rm $WINEPREFIX/runners/.mactan_wine_version"
 
 
 # Export Wine-related environment variables
