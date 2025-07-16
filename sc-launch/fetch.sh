@@ -52,7 +52,7 @@
       echo "*                                                     *"
       echo "*   Type 'y' to overwrite this file only              *"
       echo "*   Type 'a' to overwrite ALL files without asking    *"
-      echo "*   Type any other key to skip                         *"
+      echo "*   Type any other key to skip                        *"
       echo "*                                                     *"
       echo "*******************************************************"
       echo
