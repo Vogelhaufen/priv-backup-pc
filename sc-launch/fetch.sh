@@ -22,6 +22,19 @@
 
   overwrite_all=false
 
+  wrap_text() {
+    local text="$1"
+    local width=50
+    local len=${#text}
+    local start=0
+
+    while [ $start -lt $len ]; do
+      local segment="${text:start:width}"
+      printf "*   %-50s*\n" "$segment"
+      start=$((start + width))
+    done
+  }
+
   for file in "$src_dir"/* "$src_dir"/.[!.]* "$src_dir"/..?*; do
     [ -e "$file" ] || continue
 
@@ -29,11 +42,25 @@
     target="$start_dir/$basefile"
 
     if [ -e "$target" ] && [ "$overwrite_all" = false ]; then
-      read -rp "File or directory '$target' exists. Overwrite? [y/N/a=all] " answer
+      echo
+      echo "*******************************************************"
+      echo "*                                                     *"
+      echo "*   ⚠  WARNING: File or directory exists:             *"
+      wrap_text "$target"
+      echo "*                                                     *"
+      echo "*   This file already exists. Overwrite it?           *"
+      echo "*                                                     *"
+      echo "*   Type 'y' to overwrite this file only              *"
+      echo "*   Type 'a' to overwrite ALL files without asking    *"
+      echo "*   Type any other key to skip                         *"
+      echo "*                                                     *"
+      echo "*******************************************************"
+      echo
+      read -rp ">>> Your choice [y/N/a]: " answer
       case "$answer" in
         [yY]) ;;
         [aA]) overwrite_all=true ;;
-        *) echo "Skipping $target"; continue ;;
+        *) echo ">>> Skipping $target"; continue ;;
       esac
     fi
 
