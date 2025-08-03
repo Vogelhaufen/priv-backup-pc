@@ -367,7 +367,7 @@ export DXVK_ENABLE_NVAPI="1"
 
 export WINEDLLOVERRIDES="dxgi,d3d8,d3d9,d3d10core,d3d11,nvapi,nvapi64,nvofapi64=n;winemenubuilder="
 # LSFG settings
-# 240Hz monitor settings // 60*4 = 240 // change FPS to adapt
+# 240Hz monitor settings // 60*4 = 240 // change Framerate to adapt
 export LSFG_LEGACY=1
 export ENABLE_LSFG=1
 export LSFG_MULTIPLIER=4
