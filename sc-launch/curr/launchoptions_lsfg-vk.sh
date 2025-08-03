@@ -24,7 +24,7 @@ if command -v nvidia-smi > /dev/null; then
 else
   echo "⚠ nvidia-smi not found. VRAM detection failed."
 fi
-#export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_LIMIT_MB;cachedDynamicResources = a;"
+export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_LIMIT_MB;cachedDynamicResources = a;"
 
 
 echo "================ Loading Wine Prefix =================="
