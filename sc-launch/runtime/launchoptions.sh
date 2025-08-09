@@ -281,7 +281,7 @@ declare -A WINE_VERSIONS=(
 
 BASE_DIR="$WINEPREFIX/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
-CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
+CONFIG_FILE="$BASE_DIR/.LUG_wine_version"
 DEFAULT_VERSION="10.12-DLSS-NTSYNC"
 
 mkdir -p "$BASE_DIR"
@@ -326,20 +326,20 @@ ARCHIVE_NAME=$(basename "$ARCHIVE_URL")
 ARCHIVE_PATH="$BASE_DIR/$ARCHIVE_NAME"
 
 if [ -d "$EXTRACT_DIR" ]; then
-  echo "✔ Mactan runner already extracted, using existing files."
+  echo "✔ LUG runner already extracted, using existing files."
 else
   if [ ! -f "$ARCHIVE_PATH" ]; then
-    echo "⭳ Downloading Mactan runner $VERSION..."
+    echo "⭳ Downloading LUG runner $VERSION..."
     wget -O "$ARCHIVE_PATH" "$ARCHIVE_URL" || { echo "Download failed! Exiting."; exit 1; }
   else
     echo "✔ Archive for $VERSION already downloaded."
   fi
 
-  echo "🗜 Extracting Mactan runner $VERSION to $EXTRACT_DIR (conditional strip)..."
+  echo "🗜 Extracting LUG runner $VERSION to $EXTRACT_DIR (conditional strip)..."
   extract_silent "$ARCHIVE_PATH" "$EXTRACT_DIR" || { echo "Extraction failed! Exiting."; exit 1; }
 fi
 
-echo "Setup complete for Mactan Wine Runner version $VERSION."
+echo "Setup complete for LUG Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners"
 
 # exporting WINE*SYNC is a failsafe, usually NTSYNC > E/FSYNC
