@@ -38,7 +38,7 @@ export MESA_SHADER_CACHE_MAX_SIZE="10G"
 
 # LAUNCH_LOG; 1=run without redirecting output (interactive CLI logging); 0=log to file
 # 0 is recommended to skate around bugs when logging to CLI
-export LAUNCH_LOG=sc-launch.log
+export LAUNCH_LOG="sc-launch.log"
 export CLI_LOG="0"
 
 # LSFG settings
