@@ -58,7 +58,7 @@ export CLI_LOG="1"
 # export DXVK_HUD="fps"
 # export MANGOHUD="1"
 
-# Already done in the script
+# already done in the script; documentation
 # Vulkan option - install vkd3d with winetricks 
 # $WINEPREFIX winetricks --self-update
 # $WINEPREFIX winetricks vkd3d
