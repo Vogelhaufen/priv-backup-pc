@@ -33,9 +33,15 @@ fi
 
 # Patch libcuda.so for DLSSv4 support
 PATCHED_LIB="$PWD/libcuda.patched.so"
-HASHFILE="$HOME/.cache/libcuda.so.sha256"
-mkdir -p "$(dirname "$HASHFILE")"
-CURRENT_HASH=$(sha256sum "$LIBCUDA_ORIG" | cut -d ' ' -f 1)
+HASHFILE="$PWD/libcuda.so.md5"   # non-hidden, saved in directory where script was started
+
+# ensure md5sum exists
+if ! command -v md5sum >/dev/null 2>&1; then
+  echo "✘ md5sum not found. Install coreutils (md5sum)."
+  exit 1
+fi
+
+CURRENT_HASH=$(md5sum "$LIBCUDA_ORIG" | cut -d ' ' -f 1)
 
 if [ ! -f "$HASHFILE" ] || [ "$CURRENT_HASH" != "$(cat "$HASHFILE")" ] || [ ! -f "$PATCHED_LIB" ]; then
   echo "⚠ libcuda.so changed or patch missing. Applying patch..."
