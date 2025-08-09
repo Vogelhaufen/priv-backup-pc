@@ -33,7 +33,7 @@ fi
 
 # Patch libcuda.so for DLSSv4 support
 PATCHED_LIB="$PWD/libcuda.patched.so"
-HASHFILE="$PWD/libcuda.so.md5"   # non-hidden, saved in directory where script was started
+HASHFILE="$PWD/libcuda.so.md5"
 
 # ensure md5sum exists
 if ! command -v md5sum >/dev/null 2>&1; then
