@@ -44,16 +44,32 @@ export CLI_LOG="0"
 # LSFG settings
 # https://github.com/PancakeTAS/lsfg-vk
 # 240Hz monitor settings // 60*4 = 240 // change Framerate to adapt
-#export LSFG_LEGACY=1
-#export ENABLE_LSFG=1
-#export LSFG_MULTIPLIER=4
-#export LSFG_PERFORMANCE_MODE=1
-#export LSFG_PERF_MODE=1
-#export LSFG_FLOW_SCALE=0.75
-#export LSFG_HDR_MODE=1
-#export VK_LOADER_DEBUG=all
-#export DXVK_FRAME_RATE=60
-#export VKD3D_FRAME_RATE=60
+export ENABLE_LSFG_ALL=1   # to enable lsfg-vk
+unset ENABLE_LSFG_ALL      # to disable lsfg-vk
+
+if [ "$ENABLE_LSFG_ALL" = "1" ]; then
+  export LSFG_LEGACY=1
+  export ENABLE_LSFG=1
+  export LSFG_MULTIPLIER=4
+  export LSFG_PERFORMANCE_MODE=1
+  export LSFG_PERF_MODE=1
+  export LSFG_FLOW_SCALE=0.75
+  export LSFG_HDR_MODE=1
+  export VK_LOADER_DEBUG=all
+  export DXVK_FRAME_RATE=60
+  export VKD3D_FRAME_RATE=60
+else
+  unset LSFG_LEGACY
+  unset ENABLE_LSFG
+  unset LSFG_MULTIPLIER
+  unset LSFG_PERFORMANCE_MODE
+  unset LSFG_PERF_MODE
+  unset LSFG_FLOW_SCALE
+  unset LSFG_HDR_MODE
+  unset VK_LOADER_DEBUG
+  unset DXVK_FRAME_RATE
+  unset VKD3D_FRAME_RATE
+fi
 
 # Optional HUDs
 # export DXVK_HUD="fps"
