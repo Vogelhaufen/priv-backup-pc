@@ -11,7 +11,7 @@ export DISPLAY=
 
 # disable E/FSYNC
 export WINEFSYNC=0
-export WINEFSYNC=0
+export WINEESYNC=0
 
 # Game and Store identifiers
 export GAMEID="umu-starcitizen-noPreset-noProton"
