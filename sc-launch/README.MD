@@ -87,9 +87,6 @@ The variables modify a registry value, which is why simply deleting them is not 
 **Q:  Direct3D 11 or Vulkan?**  
 **A:** Vulkan is considered beta and very experimental. Expect a lot of crashing on NVIDIA. Direct3D 11 is the stable choice!
 
-**Q:  Why are we gaming in a sandbox?**  
-**A:** Because EAC—Easy Anti-Cheat, or as some call it, “Extremely Annoying Code”—throws a fit the moment you try to breathe near a mod. Want better graphics with DLSS patches? Nope, EAC thinks you're plotting a world takeover. So we run the game in a sandbox—basically a digital playpen—where EAC can’t see us committing the heinous crime of trying to make our game look better. It's like tricking a mall cop with mirrored sunglasses. Everyone wins... except EAC, and honestly, I'm okay with that.
-
 **Q:  My game is lagging!**  
 **A:** Direct3D 11 needs like 15 minutes to finish shader caching. Vulkan needs a warmup on first start, after that its fine!
 
