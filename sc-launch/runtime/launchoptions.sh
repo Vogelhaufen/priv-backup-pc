@@ -354,7 +354,7 @@ else
     echo "Requires Kernel 6.14 or newer"
     echo "Falling back to E/Fsync"
     export WINEFSYNC=1
-    export WINEFSYNC=1
+    export WINEESYNC=1
   fi
 fi
 
