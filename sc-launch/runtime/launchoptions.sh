@@ -9,6 +9,10 @@
 # must be set before REG settings otherwise the script will die
 export DISPLAY=
 
+# disable E/FSYNC
+export WINEFSYNC=0
+export WINEFSYNC=0
+
 # Game and Store identifiers
 export GAMEID="umu-starcitizen-noPreset-noProton"
 export STORE="none"
@@ -341,13 +345,9 @@ echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
-    export WINEFSYNC=0
-    export WINEFSYNC=0
 else
   if sudo -n modprobe ntsync 2>/dev/null; then
     echo "✔ ntsync loaded without password prompt."
-    export WINEFSYNC=0
-    export WINEFSYNC=0
   else
     echo "✘ Failed to load ntsync without prompt."
     echo "Please run 'sudo modprobe ntsync' manually and re-run this script."
