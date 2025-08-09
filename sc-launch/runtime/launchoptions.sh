@@ -93,16 +93,21 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_LIMIT_MB;cachedDynamicResources
 echo "================ Loading Wine Prefix =================="
 SC_LAUNCH_SCRIPT="sc-launch.sh"
 ENVEXPORT_FILE="$PWD/ENVEXPORT"
+
+# Clear ENVEXPORT_FILE if exists
+> "$ENVEXPORT_FILE"
+
 if [ -f "$SC_LAUNCH_SCRIPT" ]; then
   grep "export WINEPREFIX" "$SC_LAUNCH_SCRIPT" > "$ENVEXPORT_FILE"
-  if grep -q "WINEPREFIX" "$ENVEXPORT_FILE"; then
-    . "$ENVEXPORT_FILE"
-    echo "✔ WINEPREFIX loaded: $WINEPREFIX"
-  else
-    echo "✘ [ERROR] WINEPREFIX not found in $SC_LAUNCH_SCRIPT"
-    echo "Using default WINEPREFIX=$HOME/Games/star-citizen"
-    export WINEPREFIX=$HOME/Games/star-citizen
-  fi
+fi
+
+if [ -f "$ENVEXPORT_FILE" ] && grep -q "WINEPREFIX" "$ENVEXPORT_FILE"; then
+  . "$ENVEXPORT_FILE"
+  echo "✔ WINEPREFIX loaded: $WINEPREFIX"
+else
+  echo "✘ [ERROR] WINEPREFIX not found in $SC_LAUNCH_SCRIPT or script missing"
+  echo "Using default WINEPREFIX=$HOME/Games/star-citizen"
+  export WINEPREFIX="$HOME/Games/star-citizen"
 fi
 
 # i hate this part; ToDO
