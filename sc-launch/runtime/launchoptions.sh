@@ -3,8 +3,70 @@
 # CONFIGURATION & ENVIRONMENT SETUP    #
 #--------------------------------------#
 
-SC_LAUNCH_SCRIPT="sc-launch.sh"
-ENVEXPORT_FILE="$PWD/ENVEXPORT"
+# BEGIN env var
+
+# Enables winewayland driver; required for VULKAN
+# must be set before REG settings otherwise the script will die
+export DISPLAY=
+
+# Game and Store identifiers
+export GAMEID="umu-starcitizen-noPreset-noProton"
+export STORE="none"
+
+# Enable Easy Anti-Cheat client
+export EOS_USE_ANTICHEATCLIENTNULL="0"
+
+# NVIDIA DLSS settings
+export PROTON_ENABLE_NGX_UPDATER="1"
+export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest"
+export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
+
+# Vulkan and DXVK settings
+export DXVK_HDR="0"
+export DXVK_LOG_LEVEL="error"
+export DXVK_NVAPIHACK="0"
+export DXVK_ENABLE_NVAPI="1"
+
+# NVIDIA OpenGL shader cache settings
+export __GL_SHADER_DISK_CACHE_SIZE="10737418240"
+export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
+export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP="1"
+
+# Mesa shader cache settings
+export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
+export MESA_SHADER_CACHE_MAX_SIZE="10G"
+
+# LAUNCH_LOG; 1=run without redirecting output (interactive CLI logging); 0=log to file
+export LAUNCH_LOG=sc-launch.log
+export CLI_LOG="1"
+
+# LSFG settings
+# https://github.com/PancakeTAS/lsfg-vk
+# 240Hz monitor settings // 60*4 = 240 // change Framerate to adapt
+#export LSFG_LEGACY=1
+#export ENABLE_LSFG=1
+#export LSFG_MULTIPLIER=4
+#export LSFG_PERFORMANCE_MODE=1
+#export LSFG_PERF_MODE=1
+#export LSFG_FLOW_SCALE=0.75
+#export LSFG_HDR_MODE=1
+#export VK_LOADER_DEBUG=all
+#export DXVK_FRAME_RATE=60
+#export VKD3D_FRAME_RATE=60
+
+# Optional HUDs
+# export DXVK_HUD="fps"
+# export MANGOHUD="1"
+
+# Already done in the script
+# Vulkan option - install vkd3d with winetricks 
+# $WINEPREFIX winetricks --self-update
+# $WINEPREFIX winetricks vkd3d
+# $WINEPREFIX winetricks dxvk
+# $WINEPREFIX winetricks dxkk_nvapi
+
+# END of env var
+
 
 echo "=================== GPU Detection ==================="
 if ! lspci | grep -iq nvidia; then
@@ -28,6 +90,8 @@ export DXVK_CONFIG="dxgi.maxDeviceMemory = $VRAM_LIMIT_MB;cachedDynamicResources
 
 
 echo "================ Loading Wine Prefix =================="
+SC_LAUNCH_SCRIPT="sc-launch.sh"
+ENVEXPORT_FILE="$PWD/ENVEXPORT"
 if [ -f "$SC_LAUNCH_SCRIPT" ]; then
   grep "export WINEPREFIX" "$SC_LAUNCH_SCRIPT" > "$ENVEXPORT_FILE"
   if grep -q "WINEPREFIX" "$ENVEXPORT_FILE"; then
@@ -40,8 +104,12 @@ if [ -f "$SC_LAUNCH_SCRIPT" ]; then
   fi
 fi
 
+# i hate this part; ToDO
+export wine_path="$WINEPREFIX/runners/wine_runner/bin"
+export WINE_PATH="$wine_path"
+
 echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
-# Hardcoded VERSION for downgrades
+# hardcoded VERSION for downgrades; rm .dxvk_versions; replace VERSION to change during runtime
 DXVK_VERSION="2.7" 
 DXVK_NVAPI_VERSION="0.9.0"
 
@@ -108,7 +176,7 @@ else
 fi
 
 
-# Setup fake DLLs for DLSS // only if not already existing
+# Setup fake DLLs for DLSS // only if not already existing // deprecated since lug-wine-10.12
 
 echo "============ Setting up fake DLLs for DLSS ============"
 
@@ -135,7 +203,7 @@ for file in /usr/lib/nvidia/wine/*.dll; do
     fi
 done
 
-echo "============= Mactan Wine Runner Setup ==============="
+echo "============= LUG Wine Runner Setup ==============="
 
 extract_silent() {
   local archive_file="$1"
@@ -178,7 +246,8 @@ extract_silent() {
 }
 
 declare -A WINE_VERSIONS=(
-
+  
+  ["10.12-1-DLSS-NTSYNC"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12-1/lug-wine-tkg-staging-ntsync-git-10.12-1.tar.gz"
   ["10.12-DLSS-NTSYNC"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-ntsync-git-10.12.tar.zst"
   ["10.12-DLSS-FSYNC"]="https://github.com/starcitizen-lug/lug-wine/releases/download/10.12/lug-wine-tkg-staging-fsync-git-10.12.tar.zst"
   ["10.10-git"]="https://github.com/mactan-sc/mactan-sc-wine/releases/download/10.10-git/wine-tkg-staging-ntsync-git-10.10.tar.gz"
@@ -192,7 +261,7 @@ declare -A WINE_VERSIONS=(
 BASE_DIR="$WINEPREFIX/runners"
 EXTRACT_DIR="$BASE_DIR/wine_runner"
 CONFIG_FILE="$BASE_DIR/.mactan_wine_version"
-DEFAULT_VERSION="10.12-DLSS-NTSYNC"
+DEFAULT_VERSION="10.12-1-DLSS-NTSYNC"
 
 mkdir -p "$BASE_DIR"
 
@@ -252,62 +321,30 @@ fi
 echo "Setup complete for Mactan Wine Runner version $VERSION."
 echo "To switch from $VERSION to another wine-runner: rm -rf $WINEPREFIX/runners"
 
-
-# Disabled prompting // sudo is already gained in startgame script
-
+# exporting WINE*SYNC is a failsafe, usually NTSYNC > E/FSYNC
 echo "========== Loading ntsync kernel module =========="
 if lsmod | grep -q ntsync; then
   echo "✔ ntsync already loaded."
+    export WINEFSYNC=0
+    export WINEFSYNC=0
 else
   if sudo -n modprobe ntsync 2>/dev/null; then
     echo "✔ ntsync loaded without password prompt."
+    export WINEFSYNC=0
+    export WINEFSYNC=0
   else
     echo "✘ Failed to load ntsync without prompt."
     echo "Please run 'sudo modprobe ntsync' manually and re-run this script."
     echo "Requires Kernel 6.14 or newer"
     echo "Falling back to E/Fsync"
+    export WINEFSYNC=1
+    export WINEFSYNC=1
   fi
 fi
 
-CONFIG_FILE="$HOME/Games/star-citizen/.graphics_api_choice"
-
-# Check if the user has already made a choice
-# We need that cause Vulkan is crashing on NVIDIA without disabling NV-Cache
-# Building DXVK 2.7 from source + 570 Branch is recommended for Vulkan
-if [[ -f "$CONFIG_FILE" ]]; then
-    choice=$(<"$CONFIG_FILE")
-    echo "Using saved graphics API choice: $choice"
-    echo "To change this, delete or edit: $CONFIG_FILE"
-else
-    echo "Which graphics API do you want to use?"
-    echo "1) Vulkan"
-    echo "2) Direct3D 11"
-    echo "3) I don't know (default behavior)"
-    read -rp "Enter 1, 2 or 3: " answer
-
-    case "$answer" in
-        1) choice="vulkan" ;;
-        2) choice="d3d11" ;;
-        *) choice="unknown" ;;
-    esac
-
-    echo "$choice" > "$CONFIG_FILE"
-    echo "Saved your choice: $choice"
-fi
-
-# Apply settings based on choice
-case "$choice" in
-    vulkan)
-        export __GL_SHADER_DISK_CACHE=0
-        ;;
-    d3d11|unknown)
-        export __GL_SHADER_DISK_CACHE=1
-        ;;
-esac
-
-# REG Key to enable NGX
+# REG Key to enable NGX // deprecated since lug-wine-10.12
 echo "============= Setting Registry Keys =============="
-WINE_BIN="/home/hans/Games/star-citizen/runners/wine_runner/bin/wine"
+WINE_BIN="$WINEPREFIX/runners/wine_runner/bin/wine"
 REG_PATH="HKLM\\Software\\NVIDIA Corporation\\Global\\NGXCore"
 VALUE_NAME="FullPath"
 EXPECTED_VALUE_SET="C:\\Windows\\System32"
@@ -329,65 +366,13 @@ else
     echo "Setting registry key..."
     "$WINE_BIN" reg add "$REG_PATH" /v "$VALUE_NAME" /t REG_SZ /d "$EXPECTED_VALUE_SET" /f
 fi
-
 # END REG Key to enable NGX
-
-# Wait for previous wine instance to die
-sleep 3
-# Proton / umu; no alien startscripts; not in use rn
-export GAMEID=umu-starcitizen-noPreset-noProton
-export STORE=none
-# Enable EAC
-export EOS_USE_ANTICHEATCLIENTNULL=0
-# Libcuda.so
-# Debug: https://github.com/Vingian/libcudatest/blob/main/libcudatest.c
-#export LD_LIBRARY_PATH=$PWD/usr/lib/libcuda.so
-# DLSS Version 4
-export PROTON_ENABLE_NGX_UPDATER=1
-export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest"
-# Enable DLSS debug overlay in-game; to disable, set DLSSIndicator=1,DLSSGIndicator=1
-export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
-# NVIDIA related
-export __GL_SHADER_DISK_CACHE_SIZE="10737418240"
-export __GL_SHADER_DISK_CACHE_PATH="$WINEPREFIX"
-export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP="1"
-export MESA_SHADER_CACHE_DIR="$WINEPREFIX"
-export MESA_SHADER_CACHE_MAX_SIZE="10G"
-# Even when HDR is not used its fine to leave it enabled since ingame it is disabled by default
-export DXVK_HDR="1"
-export DXVK_LOG_LEVEL="error"
-export DXVK_NVAPIHACK="0"
-export DXVK_ENABLE_NVAPI="1"
-# Enables winewayland driver; required for VULKAN
-export DISPLAY=
-
-# LSFG settings
-# Does not work with winelaydriver and VULKAN 
-#export ENABLE_LSFG=1
-#export LSFG_MULTIPLIER=4
-#export LSFG_PERF_MODE
-#export LSFG_FLOW_SCALE=0.75
-#export LSFG_HDR=1
-#export VK_LOADER_DEBUG=all
-#export DXVK_FRAME_RATE=60
-#export VKD3D_FRAME_RATE=60
-
-
-# Optional HUDs
-# export DXVK_HUD=fps
-# export MANGOHUD=1
-
-# Option vulkan
-# $WINEPREFIX winetricks vkd3d
-
-export wine_path="$WINEPREFIX/runners/wine_runner/bin"
-export WINE_PATH="$wine_path"
-
 
 echo "==================== Paths used ======================"
 echo "WINEPREFIX dir: $WINEPREFIX"
 echo "Wine runner bin dir: $wine_path"
 
+# extracted from lug-helper script
 case "$1" in
   "shell")
     echo "Entering Wine prefix maintenance shell. Type 'exit' when done."
@@ -417,9 +402,16 @@ trap update_check EXIT
 
 
 echo "=============== Launching Star Citizen ==============="
-export LAUNCH_LOG=sc-launch.log
 # You can pin Cores to SC using taskset
 # e.g. /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$launch_log" 2>&1
 # Check your CPU specs
 # Not recommended as default
-"$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$LAUNCH_LOG" 2>&1
+echo "=============== Launching Star Citizen ==============="
+
+if [ "$CLI_LOG" = "1" ]; then
+  # Run without redirecting output (interactive CLI logging)
+  "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu
+else
+  # Run with output redirected to log file
+  "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$LAUNCH_LOG" 2>&1
+fi
