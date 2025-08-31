@@ -30,7 +30,7 @@ export DXVK_HDR="0"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
-export DXVK_FILTER_DEVICE_NAME="$(vulkaninfo --summary | grep -i deviceName | head -n1 | awk -F'= *' '{print $2}')"
+export DXVK_FILTER_DEVICE_NAME="$(vulkaninfo --summary | grep -i deviceName | grep -i NVIDIA | head -n1 | awk -F'= *' '{print $2}')"
 
 # NVIDIA OpenGL shader cache settings
 export __GL_SHADER_DISK_CACHE_SIZE="10737418240"
