@@ -8,7 +8,20 @@
 # Enables winewayland driver; required for VULKAN
 # must be set before REG settings otherwise the script will die
 export DISPLAY=
+export WINEPREFIX="$HOME/Games/star-citizen"
+# LANG?
+export LANG="de_DE.UTF-8"
 
+# Limit Vulkan memory
+#export VK_VRAM_REPORT_LIMIT_HEAP_SIZE="16096"
+#export export VK_VRAM_REPORT_LIMIT_DEVICE_ID="0x10de:0x2704"
+#export VK_LAYER_PATH="/usr/share/vulkan/explicit_layer.d"
+#export VK_INSTANCE_LAYERS="VK_LAYER_MESA_vram_report_limit"
+
+# nvidia SM / 50xx cards only
+export NVPRESENT_ENABLE_SMOOTH_MOTION="1"
+export __GL_GSYNC_ALLOWED=1
+export __GL_MaxFramesAllowed=1
 # disable E/FSYNC
 export WINEFSYNC=0
 export WINEESYNC=0
@@ -23,14 +36,15 @@ export EOS_USE_ANTICHEATCLIENTNULL="0"
 # NVIDIA DLSS settings
 export PROTON_ENABLE_NGX_UPDATER="1"
 export DXVK_NVAPI_DRS_SETTINGS="NGX_DLSS_RR_OVERRIDE=on,NGX_DLSS_SR_OVERRIDE=on,NGX_DLSS_FG_OVERRIDE=on,NGX_DLSS_RR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest,NGX_DLSS_SR_OVERRIDE_RENDER_PRESET_SELECTION=render_preset_latest"
-export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1024,DLSSGIndicator=2"
+export DXVK_NVAPI_SET_NGX_DEBUG_OPTIONS="DLSSIndicator=1,DLSSGIndicator=1"
+
 
 # Vulkan and DXVK settings
 export DXVK_HDR="0"
 export DXVK_LOG_LEVEL="error"
 export DXVK_NVAPIHACK="0"
 export DXVK_ENABLE_NVAPI="1"
-export DXVK_FILTER_DEVICE_NAME="$(vulkaninfo --summary | grep -i deviceName | grep -i NVIDIA | head -n1 | awk -F'= *' '{print $2}')"
+export DXVK_FILTER_DEVICE_NAME="$(vulkaninfo --summary | grep -i deviceName | head -n1 | awk -F'= *' '{print $2}')"
 
 # NVIDIA OpenGL shader cache settings
 export __GL_SHADER_DISK_CACHE_SIZE="10737418240"
@@ -43,15 +57,18 @@ export MESA_SHADER_CACHE_MAX_SIZE="10G"
 
 # LAUNCH_LOG; 1=run without redirecting output (interactive CLI logging); 0=log to file
 # 0 is recommended to skate around bugs when logging to CLI
-export LAUNCH_LOG="sc-launch.log"
+export LAUNCH_LOG="$HOME/Games/star-citizen/sc-launch.log"
 export CLI_LOG="0"
 
 # LSFG settings
 # https://github.com/PancakeTAS/lsfg-vk
 # 240Hz monitor settings // 60*4 = 240 // change Framerate to adapt
+# LSFG is blocked by EAC without further workarounds
 
 # "1" to enable lsfg-vk, "0" to disable lsfg-vk
-export ENABLE_LSFG_ALL="1"   
+
+
+export ENABLE_LSFG_ALL="0"
 
 if [ "$ENABLE_LSFG_ALL" = "1" ]; then
   export LSFG_LEGACY="1"
@@ -75,10 +92,12 @@ else
   unset DXVK_FRAME_RATE
   unset VKD3D_FRAME_RATE
 fi
-
+  export DXVK_FRAME_RATE="60"
+  export VKD3D_FRAME_RATE="60"
 # Optional HUDs
 # export DXVK_HUD="fps"
-# export MANGOHUD="1"
+#
+export MANGOHUD="1"
 
 # already done in the script; documentation
 # Vulkan option - install vkd3d with winetricks 
@@ -93,7 +112,7 @@ fi
 echo "=================== GPU Detection ==================="
 if ! lspci | grep -iq nvidia; then
   echo "✘ No NVIDIA graphics card found. Exiting."
-  exit 1
+#  exit 1
 fi
 echo "✔ NVIDIA GPU detected."
 
@@ -137,7 +156,7 @@ export WINE_PATH="$wine_path"
 
 echo "========== Checking DXVK and DXVK/NVAPI DLLs =========="
 # hardcoded VERSION for downgrades; rm .dxvk_versions; replace VERSION to change during runtime
-DXVK_VERSION="2.7" 
+DXVK_VERSION="2.7.1"
 DXVK_NVAPI_VERSION="0.9.0"
 
 DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/v${DXVK_VERSION}/dxvk-${DXVK_VERSION}.tar.gz"
@@ -287,6 +306,8 @@ mkdir -p "$BASE_DIR"
 
 if [ -f "$CONFIG_FILE" ]; then
   VERSION=$(cat "$CONFIG_FILE")
+  #VERSION=$(strings $HOME/Games/star-citizen/runners/wine_runner/bin/wine | grep -oP '\bwine-tkg[^/\s]*10\.[^/\s]*' | head -n1)
+  #ECHO $VERSION
   if [[ ! ${WINE_VERSIONS[$VERSION]+_} ]]; then
     echo "Saved version '$VERSION' not found in available versions. Removing config."
     rm -f "$CONFIG_FILE"
@@ -420,11 +441,10 @@ trap update_check EXIT
 # Check your CPU specs
 # Not recommended as default
 echo "=============== Launching Star Citizen ==============="
-
 if [ "$CLI_LOG" = "1" ]; then
   # Run without redirecting output (interactive CLI logging)
-  "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu
+  /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu
 else
   # Run with output redirected to log file
-  "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$LAUNCH_LOG" 2>&1
+  /usr/bin/taskset -c 0-7,16-23 "$wine_path"/wine "C:\\Program Files\\Roberts Space Industries\\RSI Launcher\\RSI Launcher.exe" --disable-gpu --in-process-gpu > "$LAUNCH_LOG" 2>&1
 fi
